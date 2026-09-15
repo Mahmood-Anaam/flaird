@@ -1,6 +1,7 @@
 {
-  "model_name_or_path": "answerdotai/ModernBERT-large",
+  "model_name_or_path": null,
   "tokenizer_name_or_path": "answerdotai/ModernBERT-large",
+  "encoder_name_or_path": "answerdotai/ModernBERT-large",
   "fusion_type": "attention",
   "use_generator_classifier": true,
   "num_generator_labels": 11,

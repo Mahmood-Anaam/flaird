@@ -20,12 +20,20 @@ class ModelArguments:
     model_name_or_path: str | None = field(
         default=None,
         metadata={
-            "help": "Path to pretrained model or model identifier from huggingface.co/models"
+            "help": (
+                "Path/Hub id of an existing FLAIRD checkpoint to resume/evaluate. "
+                "When unset, a fresh model is built from the architecture fields below."
+            )
         },
     )
 
+    encoder_name_or_path: str = field(
+        default="answerdotai/ModernBERT-large",
+        metadata={"help": "Hub id/path of the pretrained text encoder to compose FLAIRD with."},
+    )
+
     tokenizer_name_or_path: str | None = field(
-        default=None,
+        default="answerdotai/ModernBERT-large",
         metadata={
             "help": "Path to pretrained tokenizer. If not specified, uses model_name_or_path."
         },
