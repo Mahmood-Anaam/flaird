@@ -76,7 +76,8 @@ def main():
     train_dataset = train_dataset.map(
         prepare_dataset,
         batched=True,
-        batch_size=2000,
+        batch_size=5000,
+        num_proc=4,
         remove_columns=train_dataset.column_names,
         fn_kwargs={
             "tokenizer": tokenizer,
@@ -88,9 +89,15 @@ def main():
     eval_dataset = eval_dataset.map(
         prepare_dataset,
         batched=True,
-        batch_size=2000,
+        batch_size=5000,
+        num_proc=4,
         remove_columns=eval_dataset.column_names,
-        fn_kwargs={"tokenizer": tokenizer},
+        fn_kwargs={
+            "tokenizer": tokenizer,
+            "text_column": data_args.text_column,
+            "feature_column": data_args.feature_column,
+            "max_seq_length": model_args.max_seq_length,
+        },
     )
     data_collator = DataCollatorWithPadding(tokenizer=tokenizer)
 
