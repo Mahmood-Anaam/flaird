@@ -34,7 +34,7 @@ def prepare_dataset(examples, tokenizer, text_column, feature_column, max_seq_le
         truncation=True,
     )
 
-    batch["forensic_features"] = [feature_column]
+    batch["forensic_features"] = examples[feature_column]
     batch["labels"] = examples["label"]
     batch["generator_labels"] = examples["generator_label"]
     return batch
