@@ -1,3 +1,4 @@
+# src\flaird\modeling\modeling_fusion.py
 from dataclasses import dataclass
 
 import torch
@@ -81,7 +82,7 @@ class AttentionFusion(nn.Module):
         semantic_state = semantic_state.squeeze(1)
         context = self.context_normalization(context.squeeze(1))
         gate = self.gate(torch.cat((semantic_state, context), dim=-1))
-        mixed_state = torch.lerp(context, semantic_state, gate)
+        mixed_state = context + gate * (semantic_state - context)
 
         fused_state = self.output(torch.cat((mixed_state, semantic_state * context), dim=-1))
 

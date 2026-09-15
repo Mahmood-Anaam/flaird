@@ -1,3 +1,4 @@
+# src\flaird\modeling\modeling_flaird.py
 """Hybrid multi-task FLAIRD architecture."""
 
 from collections import OrderedDict
@@ -119,7 +120,7 @@ class FlairdModel(FlairdPreTrainedModel):
         encoder_outputs = self.encoder(input_ids=input_ids, attention_mask=attention_mask, **kwargs)
         semantic_states = encoder_outputs.last_hidden_state
 
-        fusion_outputs = self.fusion(feature_states, semantic_states, attention_mask)
+        fusion_outputs = self.fusion(semantic_states, feature_states, attention_mask)
 
         return FlairdModelOutput(
             feature_states=feature_states,
@@ -229,14 +230,14 @@ class FlairdForSequenceClassification(FlairdPreTrainedModel):
             pos_weight = (
                 None
                 if self.config.pos_weight is None
-                else torch.tensor(
-                    self.config.pos_weight, device=logits.device, dtype=logits.dtype
-                )
+                else torch.tensor(self.config.pos_weight, device=logits.device, dtype=logits.dtype)
             )
             loss = nn.functional.binary_cross_entropy_with_logits(
-                 logits, labels.float(), pos_weight=pos_weight, reduction="none"
+                logits.reshape(-1),
+                labels.reshape(-1).float(),
+                pos_weight=pos_weight,
+                reduction="mean",
             )
-            
 
             if (
                 self.config.generator_loss_weight > 0
