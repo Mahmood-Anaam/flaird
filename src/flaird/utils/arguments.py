@@ -50,7 +50,7 @@ class ModelArguments:
     )
 
     max_seq_length: int | None = field(
-        default=None,
+        default=512,
         metadata={
             "help": "Maximum sequence length for tokenization. Sequences longer than this will be truncated."
         },

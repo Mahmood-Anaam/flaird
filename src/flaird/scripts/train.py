@@ -28,11 +28,8 @@ def _print_summary(model) -> None:
         print(f"    - {name}: {n:,} params")
 
 
-def prepare_dataset(examples, tokenizer, text_column, feature_column):
-    batch = tokenizer(
-        examples[text_column],
-        truncation=True,
-    )
+def prepare_dataset(examples, tokenizer, text_column, feature_column, max_seq_length):
+    batch = tokenizer(examples[text_column], truncation=True, max_length=max_seq_length)
 
     batch["forensic_features"] = examples[feature_column]
     batch["labels"] = examples["label"]
@@ -81,6 +78,7 @@ def main():
             "tokenizer": tokenizer,
             "text_column": data_args.text_column,
             "feature_column": data_args.feature_column,
+            "max_seq_length": model_args.max_seq_length,
         },
     )
     eval_dataset = eval_dataset.map(
@@ -93,12 +91,11 @@ def main():
             "tokenizer": tokenizer,
             "text_column": data_args.text_column,
             "feature_column": data_args.feature_column,
+            "max_seq_length": model_args.max_seq_length,
         },
     )
 
-    data_collator = DataCollatorWithPadding(
-        tokenizer=tokenizer, max_length=model_args.max_seq_length
-    )
+    data_collator = DataCollatorWithPadding(tokenizer=tokenizer)
 
     print("train_dataset\n", train_dataset)
     print("eval_dataset\n", eval_dataset)
