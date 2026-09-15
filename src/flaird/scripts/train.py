@@ -31,12 +31,10 @@ def _print_summary(model) -> None:
 def prepare_dataset(examples, tokenizer, text_column, feature_column, max_seq_length):
     batch = tokenizer(
         examples[text_column],
-        padding=True,
         truncation=True,
-        max_length=max_seq_length,
-        return_tensors="pt",
     )
-    batch["forensic_features"] = examples[feature_column]
+
+    batch["forensic_features"] = [feature_column]
     batch["labels"] = examples["label"]
     batch["generator_labels"] = examples["generator_label"]
     return batch
