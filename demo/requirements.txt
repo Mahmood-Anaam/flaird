@@ -1,0 +1,1 @@
+flaird[demo] @ git+https://github.com/Mahmood-Anaam/flaird.git@main
