@@ -3,9 +3,14 @@
 import json
 from pathlib import Path
 
-from transformers import AutoModelForSequenceClassification, AutoTokenizer, set_seed
+import torch
+from transformers import (
+    AutoModelForSequenceClassification,
+    AutoTokenizer,
+    DataCollatorWithPadding,
+    set_seed,
+)
 
-from flaird.data.data_collator import DataCollator
 from flaird.data.dataset import load_flaird_dataset
 from flaird.modeling import FlairdForSequenceClassification
 from flaird.trainer import FlairdTrainer, compute_metrics
@@ -23,9 +28,20 @@ def _print_summary(model) -> None:
         print(f"    - {name}: {n:,} params")
 
 
+def prepare_dataset(examples, tokenizer):
+    batch = tokenizer(
+        examples["text"], padding=True, truncation=True, max_length=512, return_tensors="pt"
+    )
+    batch["forensic_features"] = examples["forensic_features"]
+    batch["labels"] = examples["label"]
+    batch["generator_labels"] = examples["generator_label"]
+    return batch
+
+
 def main():
     model_args, data_args, training_args = parse_args()
     set_seed(training_args.seed)
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
     tokenizer = AutoTokenizer.from_pretrained(
         model_args.tokenizer_name_or_path,
@@ -36,7 +52,7 @@ def main():
         model = AutoModelForSequenceClassification.from_pretrained(
             model_args.model_name_or_path,
             trust_remote_code=model_args.trust_remote_code,
-        )
+        ).to(device)
 
     else:
         model = FlairdForSequenceClassification.from_pretrained_encoder(
@@ -48,18 +64,26 @@ def main():
             pos_weight=model_args.pos_weight,
             generator_class_weights=model_args.generator_class_weights,
             freeze_encoder=model_args.freeze_encoder,
-        )
+        ).to(device)
 
     if model_args.freeze_encoder:
         model.freeze_encoder()
     train_dataset, eval_dataset = load_flaird_dataset(data_args)
-    data_collator = DataCollator(
-        tokenizer=tokenizer,
-        max_length=model_args.max_seq_length,
-        text_column=data_args.text_column,
-        feature_column=data_args.feature_column,
-        apply_text_preprocessing=False,
+    train_dataset = train_dataset.map(
+        prepare_dataset,
+        batched=True,
+        batch_size=2000,
+        remove_columns=train_dataset.column_names,
+        fn_kwargs={"tokenizer": tokenizer},
     )
+    eval_dataset = eval_dataset.map(
+        prepare_dataset,
+        batched=True,
+        batch_size=2000,
+        remove_columns=eval_dataset.column_names,
+        fn_kwargs={"tokenizer": tokenizer},
+    )
+    data_collator = DataCollatorWithPadding(tokenizer=tokenizer)
 
     print("train_dataset\n", train_dataset)
     print("eval_dataset\n", eval_dataset)
