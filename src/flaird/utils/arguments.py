@@ -49,8 +49,8 @@ class ModelArguments:
         metadata={"help": "Keep the semantic encoder frozen during this run."},
     )
 
-    max_seq_length: int = field(
-        default=512,
+    max_seq_length: int | None = field(
+        default=None,
         metadata={
             "help": "Maximum sequence length for tokenization. Sequences longer than this will be truncated."
         },

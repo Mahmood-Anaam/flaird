@@ -21,7 +21,7 @@
     0.12975964
   ],
   "freeze_encoder": false,
-  "max_seq_length": 512,
+  "max_seq_length": null,
   "dataset_train_path": "MahmoodAnaam/flaird-raid-pan26",
   "dataset_train_config_name": "flaird_train_features",
   "dataset_validation_path": "MahmoodAnaam/flaird-raid-pan26",
