@@ -28,11 +28,15 @@ def _print_summary(model) -> None:
         print(f"    - {name}: {n:,} params")
 
 
-def prepare_dataset(examples, tokenizer):
+def prepare_dataset(examples, tokenizer, text_column, feature_column, max_seq_length):
     batch = tokenizer(
-        examples["text"], padding=True, truncation=True, max_length=512, return_tensors="pt"
+        examples[text_column],
+        padding=True,
+        truncation=True,
+        max_length=max_seq_length,
+        return_tensors="pt",
     )
-    batch["forensic_features"] = examples["forensic_features"]
+    batch["forensic_features"] = examples[feature_column]
     batch["labels"] = examples["label"]
     batch["generator_labels"] = examples["generator_label"]
     return batch
@@ -74,7 +78,12 @@ def main():
         batched=True,
         batch_size=2000,
         remove_columns=train_dataset.column_names,
-        fn_kwargs={"tokenizer": tokenizer},
+        fn_kwargs={
+            "tokenizer": tokenizer,
+            "text_column": data_args.text_column,
+            "feature_column": data_args.feature_column,
+            "max_seq_length": model_args.max_seq_length,
+        },
     )
     eval_dataset = eval_dataset.map(
         prepare_dataset,
