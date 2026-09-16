@@ -34,6 +34,7 @@ DEFAULT_FEATURE_GROUPS = {
 class FlairdConfig(PretrainedConfig):
     model_type = "flaird"
     sub_configs = {"encoder_config": PretrainedConfig}
+    keys_to_ignore_at_inference = ["fusion_states"]
 
     def __init__(
         self,
@@ -75,6 +76,7 @@ class FlairdConfig(PretrainedConfig):
             0.12975964,
         ],
         generator_loss_weight: float = 0.2,
+        output_fusion_states: bool = False,
         **kwargs,
     ):
 
@@ -131,6 +133,7 @@ class FlairdConfig(PretrainedConfig):
         self.label2generator_id = label2generator_id or DEFAULT_GENERATOR_ID2LABEL
         self.generator_class_weights = generator_class_weights
         self.generator_loss_weight = generator_loss_weight
+        self.output_fusion_states = output_fusion_states
 
     @property
     def hidden_size(self):

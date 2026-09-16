@@ -146,7 +146,7 @@ class FlairdSequenceClassifierOutput(ModelOutput):
     loss: torch.Tensor | None = None
     logits: torch.Tensor | None = None
     generator_logits: torch.Tensor | None = None
-    model_outputs: FlairdModelOutput | None = None
+    fusion_states: FlairdModelOutput | None = None
 
 
 class FlairdForSequenceClassification(FlairdPreTrainedModel):
@@ -203,8 +203,15 @@ class FlairdForSequenceClassification(FlairdPreTrainedModel):
         forensic_features: torch.Tensor | None = None,
         labels: torch.Tensor | None = None,
         generator_labels: torch.Tensor | None = None,
+        output_fusion_states: bool | None = None,
         **kwargs,
     ) -> FlairdSequenceClassifierOutput:
+
+        output_fusion_states = (
+            output_fusion_states
+            if output_fusion_states is not None
+            else self.config.output_fusion_states
+        )
 
         outputs = self.model(
             input_ids=input_ids,
@@ -257,5 +264,8 @@ class FlairdForSequenceClassification(FlairdPreTrainedModel):
                 loss = loss + self.config.generator_loss_weight * generator_loss
 
         return FlairdSequenceClassifierOutput(
-            loss=loss, logits=logits, generator_logits=generator_logits, model_outputs=outputs
+            loss=loss,
+            logits=logits,
+            generator_logits=generator_logits,
+            fusion_states=outputs if output_fusion_states else None,
         )
