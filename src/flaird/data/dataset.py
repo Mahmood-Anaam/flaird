@@ -15,12 +15,18 @@ def load_flaird_dataset(data_args: DataArguments):
         cache_dir=data_args.dataset_cache_dir,
     )
     train_dataset = train_dataset[list(train_dataset.keys())[0]]
+    train_dataset = train_dataset.select_columns(
+        ["text", "label", "generator_label", "forensic_features"]
+    )
     validation_dataset = load_dataset(
         path=data_args.dataset_validation_path,
         name=data_args.dataset_validation_config_name,
         cache_dir=data_args.dataset_cache_dir,
     )
     validation_dataset = validation_dataset[list(validation_dataset.keys())[0]]
+    validation_dataset = validation_dataset.select_columns(
+        ["text", "label", "generator_label", "forensic_features"]
+    )
 
     if data_args.shuffle_train_dataset:
         train_dataset = train_dataset.shuffle(seed=data_args.shuffle_seed)

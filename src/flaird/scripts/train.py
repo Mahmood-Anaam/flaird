@@ -8,23 +8,14 @@ from torchsummary import summary
 from transformers import (
     AutoModelForSequenceClassification,
     AutoTokenizer,
-    DataCollatorWithPadding,
     set_seed,
 )
 
+from flaird.data.data_collator import DataCollator
 from flaird.data.dataset import load_flaird_dataset
 from flaird.modeling import FlairdForSequenceClassification
 from flaird.trainer import FlairdTrainer, compute_metrics
 from flaird.utils.arguments import parse_args
-
-
-def prepare_dataset(examples, tokenizer, text_column, feature_column, max_seq_length):
-    batch = tokenizer(examples[text_column], truncation=True, max_length=max_seq_length)
-
-    batch["forensic_features"] = examples[feature_column]
-    batch["labels"] = examples["label"]
-    batch["generator_labels"] = examples["generator_label"]
-    return batch
 
 
 def main():
@@ -57,35 +48,18 @@ def main():
 
     if model_args.freeze_encoder:
         model.freeze_encoder()
-    train_dataset, eval_dataset = load_flaird_dataset(data_args)
-    train_dataset = train_dataset.map(
-        prepare_dataset,
-        batched=True,
-        batch_size=10000,
-        num_proc=8,
-        remove_columns=train_dataset.column_names,
-        fn_kwargs={
-            "tokenizer": tokenizer,
-            "text_column": data_args.text_column,
-            "feature_column": data_args.feature_column,
-            "max_seq_length": model_args.max_seq_length,
-        },
-    )
-    eval_dataset = eval_dataset.map(
-        prepare_dataset,
-        batched=True,
-        batch_size=10000,
-        num_proc=8,
-        remove_columns=eval_dataset.column_names,
-        fn_kwargs={
-            "tokenizer": tokenizer,
-            "text_column": data_args.text_column,
-            "feature_column": data_args.feature_column,
-            "max_seq_length": model_args.max_seq_length,
-        },
-    )
 
-    data_collator = DataCollatorWithPadding(tokenizer=tokenizer)
+    train_dataset, eval_dataset = load_flaird_dataset(data_args)
+
+    data_collator = DataCollator(
+        tokenizer=tokenizer,
+        text_column=data_args.text_column,
+        feature_column=data_args.feature_column,
+        max_length=model_args.max_seq_length,
+        apply_text_preprocessing=False,
+        use_forensic_features=True,
+        include_labels=True,
+    )
 
     print("train_dataset\n", train_dataset)
     print("eval_dataset\n", eval_dataset)
