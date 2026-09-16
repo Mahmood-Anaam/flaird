@@ -79,8 +79,6 @@ def main():
     trainer.train(resume_from_checkpoint=training_args.resume_from_checkpoint)
     print("Evaluating the model on the validation dataset...")
     metrics = trainer.evaluate()
-    trainer.save_model()
-    tokenizer.save_pretrained(training_args.output_dir)
 
     Path(training_args.output_dir, "eval_metrics.json").write_text(
         json.dumps(metrics, indent=2, sort_keys=True), encoding="utf-8"

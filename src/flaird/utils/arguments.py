@@ -65,23 +65,11 @@ class ModelArguments:
     num_generator_labels: int = field(default=11)
     generator_loss_weight: float = field(default=0.2)
     pos_weight: float | None = list_field(
-        default=0.0311727005543984,
+        default=None,
         metadata={"help": "Optional machine cross-entropy weights."},
     )
     generator_class_weights: list[float] | None = list_field(
-        default=[
-            0.0422151,
-            0.06678689,
-            0.04729609,
-            0.06691101,
-            0.04726863,
-            0.97986811,
-            1.69372451,
-            1.71478915,
-            3.12307358,
-            3.08830738,
-            0.12975964,
-        ],
+        default=None,
         metadata={"help": "Optional generator class weights cross-entropy weights."},
     )
 
