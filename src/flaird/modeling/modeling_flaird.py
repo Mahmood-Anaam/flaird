@@ -173,6 +173,8 @@ class FlairdForSequenceClassification(FlairdPreTrainedModel):
         if config.freeze_encoder:
             self.freeze_encoder()
 
+        self.post_init()
+
     def freeze_encoder(self):
         if self.model.encoder is not None:
             self.model.encoder.requires_grad_(False)
