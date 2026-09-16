@@ -58,8 +58,7 @@
   "bf16": true,
   "dataloader_num_workers": 4,
   "dataloader_pin_memory": true,
-  "dataloader_persistent_workers": true,
-  "dataloader_prefetch_factor": 2,
+  "gradient_checkpointing": false,
   "remove_unused_columns": false,
   "label_names": [
     "labels",
