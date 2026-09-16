@@ -50,7 +50,7 @@ class FlairdPreTrainedModel(PreTrainedModel):
     config_class = FlairdConfig
     main_input_name = "input_ids"
     base_model_prefix = "model"
-    supports_gradient_checkpointing = True
+    supports_gradient_checkpointing = False
     all_tied_weights_keys = OrderedDict()
     feature_extractor = ForensicFeatureExtractor()
 
@@ -172,8 +172,6 @@ class FlairdForSequenceClassification(FlairdPreTrainedModel):
 
         if config.freeze_encoder:
             self.freeze_encoder()
-
-        self.post_init()
 
     def freeze_encoder(self):
         if self.model.encoder is not None:
