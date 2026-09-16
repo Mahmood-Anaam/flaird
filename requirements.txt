@@ -6,3 +6,4 @@ wandb>=0.21,<1
 tensorboard>=2.18.0,<3
 pystylometry[all]>=1.4.3,<2
 scikit-learn>=1.6,<2
+torch-summary==1.4.5

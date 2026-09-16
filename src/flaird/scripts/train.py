@@ -4,6 +4,7 @@ import json
 from pathlib import Path
 
 import torch
+from torchsummary import summary
 from transformers import (
     AutoModelForSequenceClassification,
     AutoTokenizer,
@@ -15,17 +16,6 @@ from flaird.data.dataset import load_flaird_dataset
 from flaird.modeling import FlairdForSequenceClassification
 from flaird.trainer import FlairdTrainer, compute_metrics
 from flaird.utils.arguments import parse_args
-
-
-def _print_summary(model) -> None:
-    total = sum(p.numel() for p in model.parameters())
-    trainable = sum(p.numel() for p in model.parameters() if p.requires_grad)
-    print(f"Model: {model.__class__.__name__} | fusion_type={model.config.fusion_type}")
-    print(f"  total params:     {total:,}")
-    print(f"  trainable params: {trainable:,} ({100 * trainable / max(total, 1):.1f}%)")
-    for name, child in model.named_children():
-        n = sum(p.numel() for p in child.parameters())
-        print(f"    - {name}: {n:,} params")
 
 
 def prepare_dataset(examples, tokenizer, text_column, feature_column, max_seq_length):
@@ -99,7 +89,7 @@ def main():
 
     print("train_dataset\n", train_dataset)
     print("eval_dataset\n", eval_dataset)
-    _print_summary(model)
+    summary(model)
     print("Training arguments:\n", training_args)
 
     trainer = FlairdTrainer(
