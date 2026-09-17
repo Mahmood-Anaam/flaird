@@ -89,8 +89,8 @@ jobs:
           import os
           from transformers import AutoTokenizer, AutoModelForSequenceClassification
 
-          tokenizer = AutoTokenizer.from_pretrained(os.environ["MODEL_ID"], trust_remote_code=True)
-          model = AutoModelForSequenceClassification.from_pretrained(os.environ["MODEL_ID"], trust_remote_code=True)
+          tokenizer = AutoTokenizer.from_pretrained(os.environ["MODEL_ID"], token=os.environ["HF_TOKEN"], trust_remote_code=True)
+          model = AutoModelForSequenceClassification.from_pretrained(os.environ["MODEL_ID"], token=os.environ["HF_TOKEN"], trust_remote_code=True)
           print(model)
           PY
 
