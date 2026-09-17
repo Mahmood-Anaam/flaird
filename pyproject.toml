@@ -44,7 +44,7 @@ flaird-train = "flaird.scripts.train:main"
 flaird-evaluator = "flaird.scripts.evaluator:main"
 flaird-inference = "flaird.scripts.inference:main"
 flaird-tira-submission = "flaird.scripts.tira_submission:main"
-
+flaird = "flaird.scripts.tira_submission:main"
 
 
 [tool.setuptools]
