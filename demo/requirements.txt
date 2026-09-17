@@ -1,1 +1,2 @@
-flaird[demo] @ git+https://github.com/Mahmood-Anaam/flaird.git@main
+pystylometry[all]>=1.4.3,<2
+transformers==5.16.1
