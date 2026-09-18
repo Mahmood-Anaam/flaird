@@ -7,13 +7,13 @@ RUN set -x \
 
 COPY src /opt/flaird/src
 COPY requirements.txt /opt/flaird/
-COPY pyproject.toml /opt/flaird
+COPY pyproject.toml /opt/flaird/
+COPY README.md /opt/flaird/
 WORKDIR /opt/flaird
+
 RUN set -x \
     && python3 -m pip config set global.break-system-packages true \
     && python3 -m pip install --no-cache . \
     && rm -rf ./build ./*.egg-info
 
-ENV HF_HUB_OFFLINE=1
-
-ENTRYPOINT ["/usr/local/bin/flaird"]
+ENTRYPOINT ["flaird-tira-submission"]
