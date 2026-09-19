@@ -64,6 +64,16 @@ def create_metadata(
     help="Defining the name of the RAID test dataset configuration.",
 )
 @click.option(
+    "--feature-column",
+    default=None,
+    help="forensic features  column of the RAID test dataset.",
+)
+@click.option(
+    "--apply-text-preprocessing",
+    is_flag=True,
+    help="apply-text-preprocessing.",
+)
+@click.option(
     "--output-dir",
     type=click.Path(file_okay=False, dir_okay=True, writable=True),
     default="raid_submissions",
@@ -86,6 +96,8 @@ def main(
     all_models,
     dataset_path,
     dataset_name,
+    feature_column,
+    apply_text_preprocessing,
     output_dir,
     batch_size,
     contact_info,
@@ -118,6 +130,8 @@ def main(
             dataset=test_ds,
             model_path=model_id,
             text_column="generation",
+            feature_column = feature_column,
+            apply_text_preprocessing=apply_text_preprocessing,
             score_column="score",
             batch_size=batch_size,
         )
