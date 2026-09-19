@@ -23,6 +23,8 @@ def test(
     device: str | torch.device = "auto",
     batch_size: int = 8,
     text_column: str = "text",
+    feature_column: str | None = None
+    apply_text_preprocessing: bool = True
     score_column: str = "label",
 ) -> pd.DataFrame:
     device = torch.device(
@@ -39,9 +41,10 @@ def test(
     data_collator = DataCollator(
         tokenizer=tokenizer,
         text_column=text_column,
+        feature_column = feature_column,
         max_length=512,
         use_forensic_features=True,
-        apply_text_preprocessing=True,
+        apply_text_preprocessing=apply_text_preprocessing,
         include_labels=False,
     )
     test_loader = torch.utils.data.DataLoader(
@@ -139,6 +142,8 @@ def main(
         device=device,
         batch_size=batch_size,
         text_column="text",
+        feature_column = None,
+        apply_text_preprocessing=True,
         score_column="label",
     )
 
