@@ -84,7 +84,7 @@ def create_metadata(
 def main(
     model_path,
     all_models,
-    data_path,
+    dataset_path,
     dataset_name,
     output_dir,
     batch_size,
@@ -103,7 +103,7 @@ def main(
 
     models_to_run = DEFAULT_MODELS if all_models else [model_path]
 
-    test_ds = load_dataset(data_path, dataset_name, split="test")
+    test_ds = load_dataset(dataset_path, dataset_name, split="test")
 
     base_out = Path(output_dir)
     base_out.mkdir(parents=True, exist_ok=True)
