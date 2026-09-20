@@ -10,7 +10,7 @@ import torch
 from datasets import load_dataset
 from transformers import set_seed
 
-from .tira_test import test
+
 
 HF_USERNAME = os.getenv("HF_USERNAME", "yusr9")
 
@@ -24,6 +24,9 @@ DEFAULT_MODELS = [
     f"{HF_USERNAME}/flaird-modernbert-large-attention-single-task-frozen",
     f"{HF_USERNAME}/flaird-modernbert-large-concatenation-single-task-frozen",
 ]
+
+def test():
+    pass
 
 
 def create_metadata(
