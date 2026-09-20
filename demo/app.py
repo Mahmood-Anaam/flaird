@@ -1,66 +1,109 @@
+"""Gradio Space for interactive FLAIRD detection and evidence inspection."""
+
 import os
-import re
 
 import gradio as gr
-
+import pandas as pd
 import spaces
 import torch
 from transformers import AutoModelForSequenceClassification, AutoTokenizer
 
-model_id = os.environ.get("MODEL_ID")
-max_length = int(os.environ.get("MAX_LENGTH", 512))
+from flaird.data.data_collator import preprocess_text
+from flaird.utils.explain import FlairdExplainer
 
-device = "cuda" if torch.cuda.is_available() else "cpu"
-tokenizer = AutoTokenizer.from_pretrained(model_id, trust_remote_code=True)
-model = (
-    AutoModelForSequenceClassification.from_pretrained(model_id, trust_remote_code=True)
-    .eval()
-    .to(device)
+MODEL_ID = os.environ.get(
+    "MODEL_ID", "MahmoodAnaam/flaird-modernbert-large-attention-multitask"
 )
+MAX_LENGTH = int(os.environ.get("MAX_LENGTH", "512"))
+DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
+TOKENIZER = AutoTokenizer.from_pretrained(MODEL_ID, trust_remote_code=True)
+MODEL = (
+    AutoModelForSequenceClassification.from_pretrained(MODEL_ID, trust_remote_code=True)
+    .to(DEVICE)
+    .eval()
+)
+EXPLAINER = FlairdExplainer(MODEL, TOKENIZER, max_length=MAX_LENGTH)
 
 
-def preprocess(text: str) -> str:
-    EMAIL_PATTERN = re.compile(r"(?i)\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b")
-    USER_MENTION_PATTERN = re.compile(r"@[A-Za-z0-9_-]+")
-    PHONE_PATTERN = re.compile(
-        r"(\+?\d{1,3})?[\s\*\.-]?\(?\d{1,4}\)?[\s\*\.-]?\d{2,4}[\s\*\.-]?\d{2,6}"
-    )
-    text = re.sub(EMAIL_PATTERN, "[EMAIL]", text)
-    text = re.sub(USER_MENTION_PATTERN, "[USER]", text)
-    text = re.sub(PHONE_PATTERN, " [PHONE]", text).replace("  [PHONE]", " [PHONE]")
-    return text.strip()
+def chart_frame(values: dict[str, float], column: str) -> pd.DataFrame:
+    return pd.DataFrame(
+        {"indicator": list(values), column: list(values.values())}
+    ).sort_values(column)
 
 
 @spaces.GPU
-def predict(text: str) -> str:
+def analyse(text: str):
+    """Return a decision, the fusion evidence, and concise local explanations."""
+    explanation = EXPLAINER.explain(preprocess_text(text), top_k=12)
+    result = {
+        "Machine-generated": round(explanation.machine_probability, 4),
+        "Human-written": round(1 - explanation.machine_probability, 4),
+    }
+    generator = (
+        pd.DataFrame(
+            {
+                "generator": list(explanation.generator_probabilities),
+                "probability": list(explanation.generator_probabilities.values()),
+            }
+        ).sort_values("probability", ascending=False)
+        if explanation.generator_probabilities
+        else pd.DataFrame({"generator": [], "probability": []})
+    )
+    attention = chart_frame(explanation.feature_attention or {}, "attention")
+    contributions = chart_frame(explanation.feature_contributions, "contribution")
+    tokens = pd.DataFrame(
+        explanation.token_contributions
+        or [{"token": "No token evidence available", "score": 0.0}]
+    )
+    status = f"**Decision:** {explanation.predicted_label}  \\n**Confidence:** {explanation.confidence:.1%}"
+    if explanation.fusion_gate is not None:
+        status += f"  \\n**Semantic fusion gate:** {explanation.fusion_gate:.1%} (higher values favour Transformer semantic evidence)."
+    status += "  \n*Evidence scores are local gradient-based sensitivities, not causal proof. Use this tool as decision support.*"
+    return result, status, generator, attention, contributions, tokens
 
-    text = preprocess(text)
-    inputs = tokenizer(text, return_tensors="pt", truncation=True, max_length=max_length)
-    inputs["forensic_features"] = model.extract_forensic_features([text], return_tensors=True)
-    inputs = inputs.to(device)
 
-    with torch.no_grad():
-        outputs = model(**inputs, output_fusion_states=True)
+with gr.Blocks(
+    theme=gr.themes.Soft(), title="FLAIRD | Forensic AI-text detection"
+) as demo:
+    gr.Markdown(
+        "# FLAIRD\n"
+        "**Forensic Linguistic and AI-Integrated Robust Detector** — combines ModernBERT semantic signals with 35 interpretable linguistic indicators."
+    )
+    with gr.Row():
+        with gr.Column(scale=3):
+            text = gr.Textbox(
+                label="Text to analyse",
+                lines=16,
+                placeholder="Paste English text here…",
+            )
+            run = gr.Button("Analyse text", variant="primary")
+        with gr.Column(scale=2):
+            decision = gr.Label(label="Binary prediction", num_top_classes=2)
+            summary = gr.Markdown()
+            gr.Markdown("### Likely generator family (auxiliary task)")
+            generator = gr.Dataframe(
+                headers=["generator", "probability"], interactive=False
+            )
+    with gr.Row():
+        attention = gr.BarPlot(
+            x="attention",
+            y="indicator",
+            orientation="horizontal",
+            title="Cross-attention over forensic feature groups",
+        )
+        contributions = gr.BarPlot(
+            x="contribution",
+            y="indicator",
+            orientation="horizontal",
+            title="Forensic group contribution to this prediction",
+        )
+    tokens = gr.Dataframe(
+        headers=["token", "score"], label="Most influential tokens", interactive=False
+    )
+    run.click(
+        analyse, text, [decision, summary, generator, attention, contributions, tokens]
+    )
 
-    logits = outputs.logits.cpu()[0]
-    score = torch.sigmoid(logits).numpy()
-
-    return f"machine score: {score}"
-
-
-demo = gr.Interface(
-    fn=predict,
-    inputs=gr.Text(
-        value="""
-Duke Ellington, a titan of jazz, revolutionized the genre through his innovative compositions, showcasing a remarkable ability to integrate voice and instrumental music. Among the notable figures who contributed to this artistic symphony was Ivie Anderson, whose scat singing mirrored the improvisational prowess of musicians like Nanton. In "Ring Dem Bells," Ellington ingeniously interweaves scat singing as a dialogue with saxophones, creating a dynamic call and response that underscores his vision of music as a fluid conversation between voices and instruments.
-
-Ellington consistently emphasized the voice as an instrument of equal importance to traditional brass and woodwinds, orchestrating his compositions with a keen ear for vocal qualities. This approach is vividly demonstrated in "Mood Indigo," where his orchestration skills shine through non-traditional chord arrangements, transforming the piece into an auditory tapestry of mood and color. It is not merely the notes that define Ellington's genius; rather, it is the way he orchestrates these elements, drawing from the unique talents of band members like Nanton, Hodges, and Williams, to create a symphony where each voice resonates with authenticity and purpose.
-
-The composition "Dusk" exemplifies Ellington's adeptness at capturing mood through orchestration, exploring tone inversions in a manner that surpasses the treatment in "Mood Indigo." Here, he delves into the emotional depths, using music to paint a vivid picture of dusk, where shadows lengthen and the world slows. This piece, alongside his faster-paced big band classics, demonstrates his versatile orchestration skills, capable of evoking warmth and romance while maintaining the vitality and energy associated with his signature style.
-
-In "Daybreak Express," Ellington employs a metaphor akin to a speeding train, utilizing orchestration to tell a thematic story of movement and progress. This vivid imagery highlights his ability to infuse music with narrative power, transforming a simple composition into a journey underscored by the crescendo and diminuendo of his adventurous harmonies. Furthermore, the cohesion and skill evident in his larger orchestras, as seen in works like "Harlem Air Shaft," speak volumes about his mastery over ensemble playing. Ellington's legacy lies not only in his vast repertoire but in how he redefined the boundaries of jazz, crafting a musical world where innovation and tradition harmoniously coexist.
-"""
-    ),
-    outputs=gr.Text(),
-)
-demo.launch()
+if __name__ == "__main__":
+    demo.launch()

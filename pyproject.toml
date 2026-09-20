@@ -48,6 +48,7 @@ flaird-train = "flaird.scripts.train:main"
 flaird-evaluator = "flaird.scripts.evaluator:main"
 flaird-tira-test = "flaird.scripts.tira_test:main"
 flaird-raid-test = "flaird.scripts.raid_test:main"
+flaird-predict = "flaird.scripts.predict:main"
 
 [tool.setuptools]
 package-dir = {"" = "src"}

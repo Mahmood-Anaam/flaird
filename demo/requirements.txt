@@ -1,2 +1,4 @@
+flaird @ git+https://github.com/Mahmood-Anaam/flaird.git
+pandas>=2.2,<3
 pystylometry[all]>=1.4.3,<2
 transformers==5.16.1
