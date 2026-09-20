@@ -52,16 +52,35 @@ jobs:
           python -m pip install --upgrade "huggingface_hub>=0.34,<2"
 
           python - <<'PY'
+          import shutil
+          from pathlib import Path
+
           from huggingface_hub import snapshot_download
 
-          path = snapshot_download(
-              repo_id="yusr9/flaird-modernbert-large-attention-multitask-frozen",
-              ignore_patterns=["*.bin", "onnx/*"],
-          )
-          print(f"Model cached at: {path}")
+          repo_id = "yusr9/flaird-modernbert-large-attention-multitask-frozen"
+          snapshot = Path(snapshot_download(repo_id=repo_id, ignore_patterns=["onnx/*"]))
+
+          # TIRA bind-mounts the model cache directory into the container.
+          # Materialize the snapshot so its files do not depend on symlinks to
+          # blobs outside the mounted directory.
+          materialized = snapshot.with_name(snapshot.name + ".materialized")
+          if materialized.exists():
+              shutil.rmtree(materialized)
+          shutil.copytree(snapshot, materialized, symlinks=False)
+          shutil.rmtree(snapshot)
+          materialized.rename(snapshot)
+
+          weights = list(snapshot.glob("*.safetensors")) + list(snapshot.glob("*.bin"))
+          if not weights or not any(weight.is_file() and weight.stat().st_size > 0 for weight in weights):
+              raise RuntimeError(f"No non-empty model weights found in {snapshot}")
+          print(f"Materialized model snapshot: {snapshot}")
+          for weight in weights:
+              print(f"Model weights: {weight} ({weight.stat().st_size} bytes)")
           PY
 
-          test -d "${HOME}/.cache/huggingface/hub/models--yusr9--flaird-modernbert-large-attention-multitask-frozen"
+          model_cache="${HOME}/.cache/huggingface/hub/models--yusr9--flaird-modernbert-large-attention-multitask-frozen"
+          test -d "${model_cache}"
+          test -n "$(find "${model_cache}/snapshots" -type f \( -name '*.safetensors' -o -name '*.bin' \) -size +0c -print -quit)"
 
       - name: Build, test, and upload image
         env:
