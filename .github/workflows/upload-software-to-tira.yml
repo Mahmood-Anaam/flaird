@@ -11,7 +11,7 @@ on:
       model_id:
         description: "Hugging Face model repository ID"
         required: true
-        default: "yusr9/flaird-modernbert-large-attention-multitask-frozen"
+        default: "MahmoodAnaam/flaird-modernbert-large-attention-multitask-frozen"
         type: string
       dry_run:
         description: "Build and test without uploading to TIRA"
@@ -108,7 +108,7 @@ jobs:
             --dataset "${TIRA_DATASET}"
             --platform linux/amd64
             --mount-hf-model "${MODEL_ID}"
-            --command "/usr/local/bin/flaird --model ${MODEL_ID}"
+            --command "/usr/local/bin/flaird-tira-test --model ${MODEL_ID}"
           )
 
           if [[ "${DRY_RUN}" == "true" ]]; then
