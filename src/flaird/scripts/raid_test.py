@@ -14,7 +14,7 @@ from transformers import AutoModelForSequenceClassification, AutoTokenizer, set_
 
 from flaird.data.data_collator import DataCollator
 
-DEFAULT_USERNAME = os.getenv("HF_USERNAME", "yusr9")
+DEFAULT_USERNAME = os.getenv("HF_USERNAME", "MahmoodAnaam")
 DEFAULT_MODEL = f"{DEFAULT_USERNAME}/flaird-modernbert-large-attention-multitask"
 DEFAULT_MODELS = [
     f"{DEFAULT_USERNAME}/flaird-modernbert-large-attention-multitask",
