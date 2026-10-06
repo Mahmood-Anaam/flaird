@@ -348,7 +348,6 @@ def merge_shards(
     predictions.to_json(
         model_dir / "predictions.json",
         orient="records",
-        lines=True,
     )
 
     click.echo(
