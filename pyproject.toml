@@ -14,30 +14,19 @@ readme = "README.md"
 requires-python = ">=3.10"
 
 dependencies = [
-    "click==8.3.3",
-    "numpy>=1.26.0,<3",
-    "pandas>=2.2.0,<3",
-    "torch>=2.8.0,<3",
-    "datasets==4.0.0",
-    "transformers==5.10.2",
-    "tqdm==4.67.3",
-    "nltk==3.9.4",
-    "pystylometry[all]==1.4.3",
-]
-
-[project.optional-dependencies]
-train = [
     "python-dotenv==1.2.2",
-    "accelerate==1.13.0",
+    "click==8.3.3",
+    "pandas>=2.2.0,<3",
+    "datasets==4.0.0",
+    "transformers==5.16.1",
     "wandb==0.28.0",
     "tensorboard>=2.18.0,<3",
     "evaluate==0.4.6",
     "scikit-learn==1.6.1",
-    "gradio>=5.50.0,<7",
-]
-dev = [
-    "pytest>=8.0",
-    "pytest-cov>=5.0",
+    "tqdm==4.67.3",
+    "nltk==3.9.4",
+    "pystylometry[all]>=1.4.3,<2",
+    "gradio==6.27.0",
 ]
 
 [project.urls]
