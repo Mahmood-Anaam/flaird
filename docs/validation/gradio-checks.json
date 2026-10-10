@@ -1,0 +1,102 @@
+{
+  "purpose": "Gradio acceptance checks using trained weights; not a benchmark evaluation",
+  "created_utc": "2026-10-10T21:14:01.807431+00:00",
+  "versions": {
+    "torch": "2.14.1+cpu",
+    "transformers": "5.16.1",
+    "gradio": "6.27.0",
+    "plotly": "6.6.0",
+    "playwright": "1.51.0"
+  },
+  "examples_sha256": "5ed14d8c3e88945573cfdc564ba657974cb8b1e6f094bd18ca82cdbf78feb200",
+  "checkpoints": [
+    {
+      "model_id": "MahmoodAnaam/flaird-modernbert-large-attention-multitask",
+      "revision": "ab52d15b7af2a2793c607bd853585d630c8237af",
+      "machine_probability": 1.1745833944587503e-05,
+      "completeness_passed": true,
+      "chart_values_checked": true,
+      "cache_reused": true
+    },
+    {
+      "model_id": "MahmoodAnaam/flaird-modernbert-large-attention-multitask-frozen",
+      "revision": "e441904c087b66cdc45a8260a94b22d19ef569ab",
+      "machine_probability": 0.0025789851788431406,
+      "completeness_passed": true,
+      "chart_values_checked": true,
+      "cache_reused": true
+    },
+    {
+      "model_id": "MahmoodAnaam/flaird-modernbert-large-attention-single-task",
+      "revision": "67712a9d0f9e400e89dd69d124e5a9aa7a475aae",
+      "machine_probability": 1.5644129234715365e-05,
+      "completeness_passed": true,
+      "chart_values_checked": true,
+      "cache_reused": true
+    },
+    {
+      "model_id": "MahmoodAnaam/flaird-modernbert-large-attention-single-task-frozen",
+      "revision": "d20f7597243d5a78d30f5610ad905517406ea3d3",
+      "machine_probability": 0.003755709622055292,
+      "completeness_passed": true,
+      "chart_values_checked": true,
+      "cache_reused": true
+    },
+    {
+      "model_id": "MahmoodAnaam/flaird-modernbert-large-concatenation-multitask",
+      "revision": "b91a9d37561f506cfe32b71cccb73e378e871b10",
+      "machine_probability": 1.729111318127252e-05,
+      "completeness_passed": true,
+      "chart_values_checked": true,
+      "cache_reused": true
+    },
+    {
+      "model_id": "MahmoodAnaam/flaird-modernbert-large-concatenation-multitask-frozen",
+      "revision": "da3942e048c997d2048e0c64b0e68c043cdc4c69",
+      "machine_probability": 0.009890187531709671,
+      "completeness_passed": true,
+      "chart_values_checked": true,
+      "cache_reused": true
+    },
+    {
+      "model_id": "MahmoodAnaam/flaird-modernbert-large-concatenation-single-task",
+      "revision": "d036ca6f1ec906e9f975b60605ed3ede611bfd66",
+      "machine_probability": 1.7976642993744463e-05,
+      "completeness_passed": true,
+      "chart_values_checked": true,
+      "cache_reused": true
+    },
+    {
+      "model_id": "MahmoodAnaam/flaird-modernbert-large-concatenation-single-task-frozen",
+      "revision": "83e505793fbabe3b82c182f0aaaf23bb4af04ee6",
+      "machine_probability": 0.014425293542444706,
+      "completeness_passed": true,
+      "chart_values_checked": true,
+      "cache_reused": true
+    }
+  ],
+  "browser_checks": [
+    "Desktop initial layout rendered",
+    "Empty input error; controls restored",
+    "CSV example selected; actual model inference and feature charts rendered",
+    "Group, attention, generator and quality tabs; JSON download verified",
+    "Manual edit clears stale prediction, provenance and export",
+    "Checkpoint switched to concatenation single-task frozen; 65% threshold and absent-head panels verified",
+    "390px mobile layout has no horizontal overflow; clear works",
+    "Fresh 390px mobile session analyzed actual text; decision cards and Plotly chart width verified"
+  ],
+  "acceptance_completed": true,
+  "browser_page_errors": [],
+  "browser_completed_utc": "2026-10-10T21:24:36.843540+00:00",
+  "checkpoint_sample": {
+    "example_index": 4,
+    "recorded_label": "human",
+    "preprocessing": "training"
+  },
+  "implementation_sha256": {
+    "demo/app.py": "eebe8b2fc43b44e2e18f9c5f23aec27530e9250e296b194233d647d12346b7b9",
+    "demo/runtime.py": "83102aae98cbc20dada11e1fb743ff325550a72de80b2282fe90ee79fc34a88c",
+    "demo/presentation.py": "63d1fd9fb96ff9a07fbae716432bba9d85670ab335aefc44186a78bb342f2eb0",
+    "demo/style.css": "a1e2f189d864e6f8573b9c592f3b1fb4a978d8620eccaf000347ed01cbb15d69"
+  }
+}

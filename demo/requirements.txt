@@ -1,1 +1,4 @@
-flaird @ git+https://github.com/Mahmood-Anaam/flaird.git@main
+# Pin the phase-one implementation while its PR is awaiting merge.
+flaird @ git+https://github.com/Mahmood-Anaam/flaird.git@41f157fc8edcc7f331c8abc8fb4cb916bbcee1e1
+torch>=2.6,<3
+plotly==6.6.0
