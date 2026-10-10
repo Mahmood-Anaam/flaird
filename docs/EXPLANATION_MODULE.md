@@ -1,5 +1,7 @@
 # FLAIRD explanation module
 
+> This document records the explanation implementation phase. The subsequent interface and research documentation are indexed in [docs/README.md](README.md).
+
 ## Scope and objective
 
 Phase one implements model-faithful, local explanations for the eight **already trained** FLAIRD variants. It introduces `src/flaird/utils/explain.py`, the `flaird-explain` command, and functional/numerical checks. Training, checkpoint weights, the feature extractor, fusion architecture, benchmark artifacts, and the Gradio interface are not changed. Interface design and comprehensive thesis/README documentation belong to the subsequent phases.
