@@ -1,0 +1,1896 @@
+{
+  "schema_version": 1,
+  "scope": "Committed artifacts; benchmark checkpoint revisions and training logs are not supplied.",
+  "source_sha256": {
+    "configs/flaird-modernbert-large-attention-multitask-frozen.json": "e40bd70d111f27ceb95385810d8900090fa372d78404128d342b409415231d56",
+    "configs/flaird-modernbert-large-attention-multitask.json": "072f17f48bd768aa7f99e222600bb5767101b2f6f24979bd90d468800d49f13f",
+    "configs/flaird-modernbert-large-attention-single-task-frozen.json": "07ffc0251b7e1341494b20df4015b63fc74bcd519650b0f7b1dde34d878ebd0c",
+    "configs/flaird-modernbert-large-attention-single-task.json": "82024b65eb58824772fe97d078681b01372474d323da8744ecbe430066f726ad",
+    "configs/flaird-modernbert-large-concatenation-multitask-frozen.json": "a4aa6082f3262f62d5d8e83eb864336fd98577cc576162e51817f501b344525d",
+    "configs/flaird-modernbert-large-concatenation-multitask.json": "7ad4c6504714c9ce8b2a7c83ad62b08c29bd7b641a40fba28eae9e226ea51917",
+    "configs/flaird-modernbert-large-concatenation-single-task-frozen.json": "2a6e695643821c41c448c272380fd2b9f68ab0276ee1ebdab07ccdd2d0fb2847",
+    "configs/flaird-modernbert-large-concatenation-single-task.json": "8267aab126fa182fb68be0866406623aca311c120defb60992b299ba2df61cdb",
+    "docs/tira-evaluation/flaird-modernbert-large-attention-multitask-frozen.json": "9fd57e2c195480ca1caa3fcdb901efbc68ac5cd37b14d52849a086a2f1c6f95c",
+    "docs/tira-evaluation/flaird-modernbert-large-attention-multitask.json": "f35264dc71875776b00eff7c4bfb2159ae04302fbd3d717595a15caa54dba153",
+    "docs/tira-evaluation/flaird-modernbert-large-attention-single-task-frozen.json": "a71768ad615e7153ec988f44338bef541159fc698d1e9b8fd5817b515d79a2c0",
+    "docs/tira-evaluation/flaird-modernbert-large-attention-single-task.json": "bc77dc290d30f12070d93766491f1ae8d52ef08e8c16e852e9eddd2e0ec20e62",
+    "docs/tira-evaluation/flaird-modernbert-large-concatenation-multitask-frozen.json": "b5eb9fa62b480775d3fb7626e068efbbe362c525e537ec2c9ac97522063b8b34",
+    "docs/tira-evaluation/flaird-modernbert-large-concatenation-multitask.json": "92aa80dca2d8dcd468e6375161348d548abe75bb3f4baae6c00b2f78eb864a05",
+    "docs/tira-evaluation/flaird-modernbert-large-concatenation-single-task-frozen.json": "4e526cab12e3c032d4ec355666d256703989f6c855ddee0ad271f5f17de55711",
+    "docs/tira-evaluation/flaird-modernbert-large-concatenation-single-task.json": "56fcb8e139ca285cc734c0f729808a6790a9dfa3351efa17f10318f698a2fb33",
+    "src/flaird/modeling/features.py": "02c43994aaf7f7f6d3f3ff79a2f1abd286361594fd5a86fda9edcaf0e6dd81c1",
+    "src/flaird/modeling/configuration_flaird.py": "4d9104fa72066f673f4341afa65ecba4848c861ac626b557a77bd1c1c6f30f95",
+    "src/flaird/data/data_collator.py": "0cadf1a08d436f545c42e71b853b7221bb1fdf7bd814280913cb5a28fb8f4a3e",
+    "src/flaird/scripts/evaluator.py": "4f367c02ac10c4db428725f360839d27a1bd48289d18b54eb45d7b9c9ef7dc4c",
+    "docs/raid-evaluation/flaird-modernbert-large-attention-multitask/results.json": "611a47d945ff4e28083f1aba7b9c7cdc19c8df0a2bf5f27fa7af0d32f321fc3d",
+    "docs/raid-evaluation/flaird-modernbert-large-attention-multitask/metadata.json": "2627ecba6605b2c43c12a7324a76a8f7dd13d0fac6cc111fc2868103bc79bf1a",
+    "notebooks/flaird_dataset_preparation.ipynb": "798139dc3f7c682bb59764d1b311b2962d8ac2c2a709266d4c1892ce9424b9ed",
+    "notebooks/flaird_training.ipynb": "750d8411c1c3ff21072f3fad289a78a1d489a627d4c03a7988793a03571aba08"
+  },
+  "canonical_features": [
+    "ttr",
+    "root_ttr",
+    "log_ttr",
+    "mtld",
+    "yule_k",
+    "yule_i",
+    "hapax_ratio",
+    "dis_hapax_ratio",
+    "sichel_s",
+    "honore_r",
+    "determiner_ratio",
+    "preposition_ratio",
+    "conjunction_ratio",
+    "pronoun_ratio",
+    "auxiliary_ratio",
+    "function_word_ratio",
+    "function_word_diversity",
+    "avg_word_length",
+    "avg_sentence_length_chars",
+    "punctuation_density",
+    "punctuation_variety",
+    "vowel_consonant_ratio",
+    "digit_ratio",
+    "uppercase_ratio",
+    "whitespace_ratio",
+    "character_bigram_entropy",
+    "word_bigram_entropy",
+    "sentence_length_cv",
+    "paragraph_length_cv",
+    "word_burstiness",
+    "repeated_bigram_ratio",
+    "question_density",
+    "exclamation_density",
+    "quote_density",
+    "newline_density"
+  ],
+  "prepared_split_sizes": {
+    "train": 5077945,
+    "validation": 565171
+  },
+  "training_family_counts_in_label_order": [
+    1450356,
+    579466,
+    1155473,
+    577318,
+    1156816,
+    2692,
+    901,
+    879,
+    265,
+    271,
+    153508
+  ],
+  "auxiliary_weight_reconstruction_max_error": 5.7246645202013724e-08,
+  "experiments": [
+    {
+      "name": "flaird-modernbert-large-attention-multitask-frozen",
+      "config": {
+        "model_name_or_path": null,
+        "tokenizer_name_or_path": "answerdotai/ModernBERT-large",
+        "encoder_name_or_path": "answerdotai/ModernBERT-large",
+        "fusion_type": "attention",
+        "use_generator_classifier": true,
+        "num_generator_labels": 11,
+        "generator_loss_weight": 0.2,
+        "pos_weight": 0.0311727005543984,
+        "generator_class_weights": [
+          0.0422151,
+          0.06678689,
+          0.04729609,
+          0.06691101,
+          0.04726863,
+          0.97986811,
+          1.69372451,
+          1.71478915,
+          3.12307358,
+          3.08830738,
+          0.12975964
+        ],
+        "freeze_encoder": true,
+        "max_seq_length": 512,
+        "dataset_train_path": "MahmoodAnaam/flaird-raid-pan26",
+        "dataset_train_config_name": "flaird_train_features",
+        "dataset_validation_path": "MahmoodAnaam/flaird-raid-pan26",
+        "dataset_validation_config_name": "flaird_validation_features",
+        "shuffle_train_dataset": true,
+        "dataset_cache_dir": "/content/drive/MyDrive/flaird/dataset",
+        "output_dir": "/content/drive/MyDrive/flaird/flaird_outputs/flaird-modernbert-large-attention-multitask-frozen",
+        "run_name": "flaird-modernbert-large-attention-multitask-frozen",
+        "num_train_epochs": 1,
+        "per_device_train_batch_size": 256,
+        "per_device_eval_batch_size": 256,
+        "seed": 42,
+        "learning_rate": 2e-05,
+        "weight_decay": 0.01,
+        "warmup_steps": 0.06,
+        "lr_scheduler_type": "cosine",
+        "optim": "adamw_torch_fused",
+        "max_grad_norm": 1.0,
+        "eval_strategy": "steps",
+        "eval_steps": 0.1,
+        "save_strategy": "steps",
+        "save_steps": 0.1,
+        "save_total_limit": 2,
+        "load_best_model_at_end": true,
+        "metric_for_best_model": "loss",
+        "greater_is_better": false,
+        "logging_strategy": "steps",
+        "logging_steps": 200,
+        "logging_first_step": true,
+        "report_to": [
+          "wandb",
+          "tensorboard"
+        ],
+        "bf16": true,
+        "dataloader_num_workers": 4,
+        "dataloader_pin_memory": true,
+        "gradient_checkpointing": false,
+        "remove_unused_columns": false,
+        "label_names": [
+          "labels",
+          "generator_labels"
+        ],
+        "push_to_hub": true,
+        "hub_model_id": "MahmoodAnaam/flaird-modernbert-large-attention-multitask-frozen",
+        "hub_strategy": "checkpoint",
+        "resume_from_checkpoint": null
+      },
+      "evaluations": [
+        {
+          "Dataset": "eloquent-20260617-test",
+          "Run": "2026-09-20-12-07-13",
+          "Roc-Auc": 0.794,
+          "Brier": 0.653,
+          "C@1": 0.611,
+          "F1": 0.744,
+          "F05U": 0.877,
+          "Mean": 0.736
+        },
+        {
+          "Dataset": "pan25-generative-ai-detection-20260508-test",
+          "Run": "2026-09-20-12-05-44",
+          "Roc-Auc": 0.935,
+          "Brier": 0.854,
+          "C@1": 0.822,
+          "F1": 0.858,
+          "F05U": 0.922,
+          "Mean": 0.878
+        },
+        {
+          "Dataset": "pan26-generative-ai-detection-20260507-test",
+          "Run": "2026-09-20-09-10-36",
+          "Roc-Auc": 0.835,
+          "Brier": 0.74,
+          "C@1": 0.651,
+          "F1": 0.713,
+          "F05U": 0.828,
+          "Mean": 0.753
+        },
+        {
+          "Dataset": "pan26-generative-ai-detection-smoke-test-20260330-training",
+          "Run": "2026-09-20-03-02-44",
+          "Roc-Auc": 0.934,
+          "Brier": 0.864,
+          "C@1": 0.853,
+          "F1": 0.815,
+          "F05U": 0.917,
+          "Mean": 0.876
+        }
+      ],
+      "pan26": {
+        "Dataset": "pan26-generative-ai-detection-20260507-test",
+        "Run": "2026-09-20-09-10-36",
+        "Roc-Auc": 0.835,
+        "Brier": 0.74,
+        "C@1": 0.651,
+        "F1": 0.713,
+        "F05U": 0.828,
+        "Mean": 0.753
+      }
+    },
+    {
+      "name": "flaird-modernbert-large-attention-multitask",
+      "config": {
+        "model_name_or_path": null,
+        "tokenizer_name_or_path": "answerdotai/ModernBERT-large",
+        "encoder_name_or_path": "answerdotai/ModernBERT-large",
+        "fusion_type": "attention",
+        "use_generator_classifier": true,
+        "num_generator_labels": 11,
+        "generator_loss_weight": 0.2,
+        "pos_weight": 0.0311727005543984,
+        "generator_class_weights": [
+          0.0422151,
+          0.06678689,
+          0.04729609,
+          0.06691101,
+          0.04726863,
+          0.97986811,
+          1.69372451,
+          1.71478915,
+          3.12307358,
+          3.08830738,
+          0.12975964
+        ],
+        "freeze_encoder": false,
+        "max_seq_length": 512,
+        "dataset_train_path": "MahmoodAnaam/flaird-raid-pan26",
+        "dataset_train_config_name": "flaird_train_features",
+        "dataset_validation_path": "MahmoodAnaam/flaird-raid-pan26",
+        "dataset_validation_config_name": "flaird_validation_features",
+        "shuffle_train_dataset": true,
+        "dataset_cache_dir": "/content/drive/MyDrive/flaird/dataset",
+        "output_dir": "/content/drive/MyDrive/flaird/flaird_outputs/flaird-modernbert-large-attention-multitask",
+        "run_name": "flaird-modernbert-large-attention-multitask",
+        "num_train_epochs": 1,
+        "per_device_train_batch_size": 128,
+        "per_device_eval_batch_size": 128,
+        "seed": 42,
+        "learning_rate": 2e-05,
+        "weight_decay": 0.01,
+        "warmup_steps": 0.06,
+        "lr_scheduler_type": "cosine",
+        "optim": "adamw_torch_fused",
+        "max_grad_norm": 1.0,
+        "eval_strategy": "steps",
+        "eval_steps": 0.1,
+        "save_strategy": "steps",
+        "save_steps": 0.1,
+        "save_total_limit": 2,
+        "load_best_model_at_end": true,
+        "metric_for_best_model": "loss",
+        "greater_is_better": false,
+        "logging_strategy": "steps",
+        "logging_steps": 200,
+        "logging_first_step": true,
+        "report_to": [
+          "wandb",
+          "tensorboard"
+        ],
+        "bf16": true,
+        "dataloader_num_workers": 4,
+        "dataloader_pin_memory": true,
+        "gradient_checkpointing": false,
+        "remove_unused_columns": false,
+        "label_names": [
+          "labels",
+          "generator_labels"
+        ],
+        "push_to_hub": true,
+        "hub_model_id": "MahmoodAnaam/flaird-modernbert-large-attention-multitask",
+        "hub_strategy": "checkpoint",
+        "resume_from_checkpoint": null
+      },
+      "evaluations": [
+        {
+          "Dataset": "pan25-generative-ai-detection-20260508-test",
+          "Run": "2026-09-20-11-34-18",
+          "Roc-Auc": 0.991,
+          "Brier": 0.94,
+          "C@1": 0.933,
+          "F1": 0.949,
+          "F05U": 0.977,
+          "Mean": 0.958
+        },
+        {
+          "Dataset": "eloquent-20260617-test",
+          "Run": "2026-09-20-11-32-04",
+          "Roc-Auc": 0.899,
+          "Brier": 0.676,
+          "C@1": 0.644,
+          "F1": 0.771,
+          "F05U": 0.892,
+          "Mean": 0.776
+        },
+        {
+          "Dataset": "pan26-generative-ai-detection-20260507-test",
+          "Run": "2026-09-20-11-24-22",
+          "Roc-Auc": 0.932,
+          "Brier": 0.792,
+          "C@1": 0.754,
+          "F1": 0.809,
+          "F05U": 0.895,
+          "Mean": 0.836
+        },
+        {
+          "Dataset": "pan26-generative-ai-detection-smoke-test-20260330-training",
+          "Run": "2026-09-20-10-56-35",
+          "Roc-Auc": 1.0,
+          "Brier": 0.967,
+          "C@1": 0.971,
+          "F1": 0.968,
+          "F05U": 0.987,
+          "Mean": 0.978
+        }
+      ],
+      "pan26": {
+        "Dataset": "pan26-generative-ai-detection-20260507-test",
+        "Run": "2026-09-20-11-24-22",
+        "Roc-Auc": 0.932,
+        "Brier": 0.792,
+        "C@1": 0.754,
+        "F1": 0.809,
+        "F05U": 0.895,
+        "Mean": 0.836
+      }
+    },
+    {
+      "name": "flaird-modernbert-large-attention-single-task-frozen",
+      "config": {
+        "model_name_or_path": null,
+        "tokenizer_name_or_path": "answerdotai/ModernBERT-large",
+        "encoder_name_or_path": "answerdotai/ModernBERT-large",
+        "fusion_type": "attention",
+        "use_generator_classifier": false,
+        "num_generator_labels": 0,
+        "generator_loss_weight": 0.0,
+        "pos_weight": 0.0311727005543984,
+        "generator_class_weights": [
+          0.0422151,
+          0.06678689,
+          0.04729609,
+          0.06691101,
+          0.04726863,
+          0.97986811,
+          1.69372451,
+          1.71478915,
+          3.12307358,
+          3.08830738,
+          0.12975964
+        ],
+        "freeze_encoder": true,
+        "max_seq_length": 512,
+        "dataset_train_path": "MahmoodAnaam/flaird-raid-pan26",
+        "dataset_train_config_name": "flaird_train_features",
+        "dataset_validation_path": "MahmoodAnaam/flaird-raid-pan26",
+        "dataset_validation_config_name": "flaird_validation_features",
+        "shuffle_train_dataset": true,
+        "dataset_cache_dir": "/content/drive/MyDrive/flaird/dataset",
+        "output_dir": "/content/drive/MyDrive/flaird/flaird_outputs/flaird-modernbert-large-attention-single-task-frozen",
+        "run_name": "flaird-modernbert-large-attention-single-task-frozen",
+        "num_train_epochs": 1,
+        "per_device_train_batch_size": 256,
+        "per_device_eval_batch_size": 256,
+        "seed": 42,
+        "learning_rate": 2e-05,
+        "weight_decay": 0.01,
+        "warmup_steps": 0.06,
+        "lr_scheduler_type": "cosine",
+        "optim": "adamw_torch_fused",
+        "max_grad_norm": 1.0,
+        "eval_strategy": "steps",
+        "eval_steps": 0.1,
+        "save_strategy": "steps",
+        "save_steps": 0.1,
+        "save_total_limit": 2,
+        "metric_for_best_model": "loss",
+        "greater_is_better": false,
+        "logging_strategy": "steps",
+        "logging_steps": 200,
+        "logging_first_step": true,
+        "report_to": [
+          "wandb",
+          "tensorboard"
+        ],
+        "bf16": true,
+        "dataloader_num_workers": 4,
+        "dataloader_pin_memory": true,
+        "gradient_checkpointing": false,
+        "remove_unused_columns": false,
+        "label_names": [
+          "labels",
+          "generator_labels"
+        ],
+        "push_to_hub": true,
+        "hub_model_id": "MahmoodAnaam/flaird-modernbert-large-attention-single-task-frozen",
+        "hub_strategy": "checkpoint",
+        "resume_from_checkpoint": null
+      },
+      "evaluations": [
+        {
+          "Dataset": "pan25-generative-ai-detection-20260508-test",
+          "Run": "2026-09-20-11-49-58",
+          "Roc-Auc": 0.93,
+          "Brier": 0.835,
+          "C@1": 0.798,
+          "F1": 0.837,
+          "F05U": 0.906,
+          "Mean": 0.861
+        },
+        {
+          "Dataset": "eloquent-20260617-test",
+          "Run": "2026-09-20-11-47-23",
+          "Roc-Auc": 0.813,
+          "Brier": 0.621,
+          "C@1": 0.577,
+          "F1": 0.715,
+          "F05U": 0.861,
+          "Mean": 0.717
+        },
+        {
+          "Dataset": "pan26-generative-ai-detection-20260507-test",
+          "Run": "2026-09-20-11-40-00",
+          "Roc-Auc": 0.823,
+          "Brier": 0.731,
+          "C@1": 0.658,
+          "F1": 0.715,
+          "F05U": 0.841,
+          "Mean": 0.754
+        },
+        {
+          "Dataset": "pan26-generative-ai-detection-smoke-test-20260330-training",
+          "Run": "2026-09-20-10-54-32",
+          "Roc-Auc": 0.927,
+          "Brier": 0.849,
+          "C@1": 0.853,
+          "F1": 0.815,
+          "F05U": 0.917,
+          "Mean": 0.872
+        }
+      ],
+      "pan26": {
+        "Dataset": "pan26-generative-ai-detection-20260507-test",
+        "Run": "2026-09-20-11-40-00",
+        "Roc-Auc": 0.823,
+        "Brier": 0.731,
+        "C@1": 0.658,
+        "F1": 0.715,
+        "F05U": 0.841,
+        "Mean": 0.754
+      }
+    },
+    {
+      "name": "flaird-modernbert-large-attention-single-task",
+      "config": {
+        "model_name_or_path": null,
+        "tokenizer_name_or_path": "answerdotai/ModernBERT-large",
+        "encoder_name_or_path": "answerdotai/ModernBERT-large",
+        "fusion_type": "attention",
+        "use_generator_classifier": false,
+        "num_generator_labels": 0,
+        "generator_loss_weight": 0.0,
+        "pos_weight": 0.0311727005543984,
+        "generator_class_weights": [
+          0.0422151,
+          0.06678689,
+          0.04729609,
+          0.06691101,
+          0.04726863,
+          0.97986811,
+          1.69372451,
+          1.71478915,
+          3.12307358,
+          3.08830738,
+          0.12975964
+        ],
+        "freeze_encoder": false,
+        "max_seq_length": 512,
+        "dataset_train_path": "MahmoodAnaam/flaird-raid-pan26",
+        "dataset_train_config_name": "flaird_train_features",
+        "dataset_validation_path": "MahmoodAnaam/flaird-raid-pan26",
+        "dataset_validation_config_name": "flaird_validation_features",
+        "shuffle_train_dataset": true,
+        "dataset_cache_dir": "/content/drive/MyDrive/flaird/dataset",
+        "output_dir": "/content/drive/MyDrive/flaird/flaird_outputs/flaird-modernbert-large-attention-single-task",
+        "run_name": "flaird-modernbert-large-attention-single-task",
+        "num_train_epochs": 1,
+        "per_device_train_batch_size": 128,
+        "per_device_eval_batch_size": 128,
+        "seed": 42,
+        "learning_rate": 2e-05,
+        "weight_decay": 0.01,
+        "warmup_steps": 0.06,
+        "lr_scheduler_type": "cosine",
+        "optim": "adamw_torch_fused",
+        "max_grad_norm": 1.0,
+        "eval_strategy": "steps",
+        "eval_steps": 0.1,
+        "save_strategy": "steps",
+        "save_steps": 0.1,
+        "save_total_limit": 2,
+        "load_best_model_at_end": true,
+        "metric_for_best_model": "loss",
+        "greater_is_better": false,
+        "logging_strategy": "steps",
+        "logging_steps": 200,
+        "logging_first_step": true,
+        "report_to": [
+          "wandb",
+          "tensorboard"
+        ],
+        "bf16": true,
+        "dataloader_num_workers": 4,
+        "dataloader_pin_memory": true,
+        "gradient_checkpointing": false,
+        "remove_unused_columns": false,
+        "label_names": [
+          "labels",
+          "generator_labels"
+        ],
+        "push_to_hub": true,
+        "hub_model_id": "MahmoodAnaam/flaird-modernbert-large-attention-single-task",
+        "hub_strategy": "checkpoint",
+        "resume_from_checkpoint": null
+      },
+      "evaluations": [
+        {
+          "Dataset": "eloquent-20260617-test",
+          "Run": "2026-09-20-11-19-09",
+          "Roc-Auc": 0.764,
+          "Brier": 0.663,
+          "C@1": 0.637,
+          "F1": 0.768,
+          "F05U": 0.883,
+          "Mean": 0.743
+        },
+        {
+          "Dataset": "pan25-generative-ai-detection-20260508-test",
+          "Run": "2026-09-20-11-18-01",
+          "Roc-Auc": 0.988,
+          "Brier": 0.935,
+          "C@1": 0.925,
+          "F1": 0.943,
+          "F05U": 0.972,
+          "Mean": 0.953
+        },
+        {
+          "Dataset": "pan26-generative-ai-detection-20260507-test",
+          "Run": "2026-09-20-11-16-58",
+          "Roc-Auc": 0.815,
+          "Brier": 0.697,
+          "C@1": 0.65,
+          "F1": 0.713,
+          "F05U": 0.827,
+          "Mean": 0.741
+        },
+        {
+          "Dataset": "pan26-generative-ai-detection-smoke-test-20260330-training",
+          "Run": "2026-09-20-10-58-52",
+          "Roc-Auc": 0.979,
+          "Brier": 0.944,
+          "C@1": 0.941,
+          "F1": 0.933,
+          "F05U": 0.972,
+          "Mean": 0.954
+        }
+      ],
+      "pan26": {
+        "Dataset": "pan26-generative-ai-detection-20260507-test",
+        "Run": "2026-09-20-11-16-58",
+        "Roc-Auc": 0.815,
+        "Brier": 0.697,
+        "C@1": 0.65,
+        "F1": 0.713,
+        "F05U": 0.827,
+        "Mean": 0.741
+      }
+    },
+    {
+      "name": "flaird-modernbert-large-concatenation-multitask-frozen",
+      "config": {
+        "model_name_or_path": null,
+        "tokenizer_name_or_path": "answerdotai/ModernBERT-large",
+        "encoder_name_or_path": "answerdotai/ModernBERT-large",
+        "fusion_type": "concatenation",
+        "use_generator_classifier": true,
+        "num_generator_labels": 11,
+        "generator_loss_weight": 0.2,
+        "pos_weight": 0.0311727005543984,
+        "generator_class_weights": [
+          0.0422151,
+          0.06678689,
+          0.04729609,
+          0.06691101,
+          0.04726863,
+          0.97986811,
+          1.69372451,
+          1.71478915,
+          3.12307358,
+          3.08830738,
+          0.12975964
+        ],
+        "freeze_encoder": true,
+        "max_seq_length": 512,
+        "dataset_train_path": "MahmoodAnaam/flaird-raid-pan26",
+        "dataset_train_config_name": "flaird_train_features",
+        "dataset_validation_path": "MahmoodAnaam/flaird-raid-pan26",
+        "dataset_validation_config_name": "flaird_validation_features",
+        "shuffle_train_dataset": true,
+        "dataset_cache_dir": "/content/drive/MyDrive/flaird/dataset",
+        "output_dir": "/content/drive/MyDrive/flaird/flaird_outputs/flaird-modernbert-large-concatenation-multitask-frozen",
+        "run_name": "flaird-modernbert-large-concatenation-multitask-frozen",
+        "num_train_epochs": 1,
+        "per_device_train_batch_size": 256,
+        "per_device_eval_batch_size": 256,
+        "seed": 42,
+        "learning_rate": 2e-05,
+        "weight_decay": 0.01,
+        "warmup_steps": 0.06,
+        "lr_scheduler_type": "cosine",
+        "optim": "adamw_torch_fused",
+        "max_grad_norm": 1.0,
+        "eval_strategy": "steps",
+        "eval_steps": 0.1,
+        "save_strategy": "steps",
+        "save_steps": 0.1,
+        "save_total_limit": 2,
+        "load_best_model_at_end": true,
+        "metric_for_best_model": "loss",
+        "greater_is_better": false,
+        "logging_strategy": "steps",
+        "logging_steps": 200,
+        "logging_first_step": true,
+        "report_to": [
+          "wandb",
+          "tensorboard"
+        ],
+        "bf16": true,
+        "dataloader_num_workers": 4,
+        "dataloader_pin_memory": true,
+        "gradient_checkpointing": false,
+        "remove_unused_columns": false,
+        "label_names": [
+          "labels",
+          "generator_labels"
+        ],
+        "push_to_hub": true,
+        "hub_model_id": "MahmoodAnaam/flaird-modernbert-large-concatenation-multitask-frozen",
+        "hub_strategy": "checkpoint",
+        "resume_from_checkpoint": null
+      },
+      "evaluations": [
+        {
+          "Dataset": "eloquent-20260617-test",
+          "Run": "2026-09-20-11-58-34",
+          "Roc-Auc": 0.856,
+          "Brier": 0.637,
+          "C@1": 0.565,
+          "F1": 0.705,
+          "F05U": 0.854,
+          "Mean": 0.723
+        },
+        {
+          "Dataset": "pan25-generative-ai-detection-20260508-test",
+          "Run": "2026-09-20-11-57-28",
+          "Roc-Auc": 0.866,
+          "Brier": 0.787,
+          "C@1": 0.719,
+          "F1": 0.761,
+          "F05U": 0.856,
+          "Mean": 0.798
+        },
+        {
+          "Dataset": "pan26-generative-ai-detection-20260507-test",
+          "Run": "2026-09-20-11-53-54",
+          "Roc-Auc": 0.774,
+          "Brier": 0.744,
+          "C@1": 0.655,
+          "F1": 0.719,
+          "F05U": 0.829,
+          "Mean": 0.744
+        },
+        {
+          "Dataset": "pan26-generative-ai-detection-smoke-test-20260330-training",
+          "Run": "2026-09-20-10-54-10",
+          "Roc-Auc": 0.924,
+          "Brier": 0.774,
+          "C@1": 0.647,
+          "F1": 0.4,
+          "F05U": 0.625,
+          "Mean": 0.674
+        }
+      ],
+      "pan26": {
+        "Dataset": "pan26-generative-ai-detection-20260507-test",
+        "Run": "2026-09-20-11-53-54",
+        "Roc-Auc": 0.774,
+        "Brier": 0.744,
+        "C@1": 0.655,
+        "F1": 0.719,
+        "F05U": 0.829,
+        "Mean": 0.744
+      }
+    },
+    {
+      "name": "flaird-modernbert-large-concatenation-multitask",
+      "config": {
+        "model_name_or_path": null,
+        "tokenizer_name_or_path": "answerdotai/ModernBERT-large",
+        "encoder_name_or_path": "answerdotai/ModernBERT-large",
+        "fusion_type": "concatenation",
+        "use_generator_classifier": true,
+        "num_generator_labels": 11,
+        "generator_loss_weight": 0.2,
+        "pos_weight": 0.0311727005543984,
+        "generator_class_weights": [
+          0.0422151,
+          0.06678689,
+          0.04729609,
+          0.06691101,
+          0.04726863,
+          0.97986811,
+          1.69372451,
+          1.71478915,
+          3.12307358,
+          3.08830738,
+          0.12975964
+        ],
+        "freeze_encoder": false,
+        "max_seq_length": 512,
+        "dataset_train_path": "MahmoodAnaam/flaird-raid-pan26",
+        "dataset_train_config_name": "flaird_train_features",
+        "dataset_validation_path": "MahmoodAnaam/flaird-raid-pan26",
+        "dataset_validation_config_name": "flaird_validation_features",
+        "shuffle_train_dataset": true,
+        "dataset_cache_dir": "/content/drive/MyDrive/flaird/dataset",
+        "output_dir": "/content/drive/MyDrive/flaird/flaird_outputs/flaird-modernbert-large-concatenation-multitask",
+        "run_name": "flaird-modernbert-large-concatenation-multitask",
+        "num_train_epochs": 1,
+        "per_device_train_batch_size": 128,
+        "per_device_eval_batch_size": 128,
+        "seed": 42,
+        "learning_rate": 2e-05,
+        "weight_decay": 0.01,
+        "warmup_steps": 0.06,
+        "lr_scheduler_type": "cosine",
+        "optim": "adamw_torch_fused",
+        "max_grad_norm": 1.0,
+        "eval_strategy": "steps",
+        "eval_steps": 0.1,
+        "save_strategy": "steps",
+        "save_steps": 0.1,
+        "save_total_limit": 2,
+        "load_best_model_at_end": true,
+        "metric_for_best_model": "loss",
+        "greater_is_better": false,
+        "logging_strategy": "steps",
+        "logging_steps": 200,
+        "logging_first_step": true,
+        "report_to": [
+          "wandb",
+          "tensorboard"
+        ],
+        "bf16": true,
+        "dataloader_num_workers": 4,
+        "dataloader_pin_memory": true,
+        "gradient_checkpointing": false,
+        "remove_unused_columns": false,
+        "label_names": [
+          "labels",
+          "generator_labels"
+        ],
+        "push_to_hub": true,
+        "hub_model_id": "MahmoodAnaam/flaird-modernbert-large-concatenation-multitask",
+        "hub_strategy": "checkpoint",
+        "resume_from_checkpoint": null
+      },
+      "evaluations": [
+        {
+          "Dataset": "pan25-generative-ai-detection-20260508-test",
+          "Run": "2026-09-20-11-30-57",
+          "Roc-Auc": 0.988,
+          "Brier": 0.931,
+          "C@1": 0.922,
+          "F1": 0.941,
+          "F05U": 0.974,
+          "Mean": 0.951
+        },
+        {
+          "Dataset": "pan26-generative-ai-detection-20260507-test",
+          "Run": "2026-09-20-11-20-59",
+          "Roc-Auc": 0.959,
+          "Brier": 0.868,
+          "C@1": 0.833,
+          "F1": 0.878,
+          "F05U": 0.933,
+          "Mean": 0.894
+        },
+        {
+          "Dataset": "eloquent-20260617-test",
+          "Run": "2026-09-20-11-20-18",
+          "Roc-Auc": 0.852,
+          "Brier": 0.684,
+          "C@1": 0.656,
+          "F1": 0.78,
+          "F05U": 0.897,
+          "Mean": 0.774
+        },
+        {
+          "Dataset": "pan26-generative-ai-detection-smoke-test-20260330-training",
+          "Run": "2026-09-20-10-58-20",
+          "Roc-Auc": 1.0,
+          "Brier": 0.966,
+          "C@1": 0.971,
+          "F1": 0.968,
+          "F05U": 0.987,
+          "Mean": 0.978
+        }
+      ],
+      "pan26": {
+        "Dataset": "pan26-generative-ai-detection-20260507-test",
+        "Run": "2026-09-20-11-20-59",
+        "Roc-Auc": 0.959,
+        "Brier": 0.868,
+        "C@1": 0.833,
+        "F1": 0.878,
+        "F05U": 0.933,
+        "Mean": 0.894
+      }
+    },
+    {
+      "name": "flaird-modernbert-large-concatenation-single-task-frozen",
+      "config": {
+        "model_name_or_path": null,
+        "tokenizer_name_or_path": "answerdotai/ModernBERT-large",
+        "encoder_name_or_path": "answerdotai/ModernBERT-large",
+        "fusion_type": "concatenation",
+        "use_generator_classifier": false,
+        "num_generator_labels": 0,
+        "generator_loss_weight": 0.0,
+        "pos_weight": 0.0311727005543984,
+        "generator_class_weights": [
+          0.0422151,
+          0.06678689,
+          0.04729609,
+          0.06691101,
+          0.04726863,
+          0.97986811,
+          1.69372451,
+          1.71478915,
+          3.12307358,
+          3.08830738,
+          0.12975964
+        ],
+        "freeze_encoder": true,
+        "max_seq_length": 512,
+        "dataset_train_path": "MahmoodAnaam/flaird-raid-pan26",
+        "dataset_train_config_name": "flaird_train_features",
+        "dataset_validation_path": "MahmoodAnaam/flaird-raid-pan26",
+        "dataset_validation_config_name": "flaird_validation_features",
+        "shuffle_train_dataset": true,
+        "dataset_cache_dir": "/content/drive/MyDrive/flaird/dataset",
+        "output_dir": "/content/drive/MyDrive/flaird/flaird_outputs/flaird-modernbert-large-concatenation-single-task-frozen",
+        "run_name": "flaird-modernbert-large-concatenation-single-task-frozen",
+        "num_train_epochs": 1,
+        "per_device_train_batch_size": 256,
+        "per_device_eval_batch_size": 256,
+        "seed": 42,
+        "learning_rate": 2e-05,
+        "weight_decay": 0.01,
+        "warmup_steps": 0.06,
+        "lr_scheduler_type": "cosine",
+        "optim": "adamw_torch_fused",
+        "max_grad_norm": 1.0,
+        "eval_strategy": "steps",
+        "eval_steps": 0.1,
+        "save_strategy": "steps",
+        "save_steps": 0.1,
+        "save_total_limit": 2,
+        "load_best_model_at_end": true,
+        "metric_for_best_model": "loss",
+        "greater_is_better": false,
+        "logging_strategy": "steps",
+        "logging_steps": 200,
+        "logging_first_step": true,
+        "report_to": [
+          "wandb",
+          "tensorboard"
+        ],
+        "bf16": true,
+        "dataloader_num_workers": 4,
+        "dataloader_pin_memory": true,
+        "gradient_checkpointing": false,
+        "remove_unused_columns": false,
+        "label_names": [
+          "labels",
+          "generator_labels"
+        ],
+        "push_to_hub": true,
+        "hub_model_id": "MahmoodAnaam/flaird-modernbert-large-concatenation-single-task-frozen",
+        "hub_strategy": "checkpoint",
+        "resume_from_checkpoint": null
+      },
+      "evaluations": [
+        {
+          "Dataset": "pan25-generative-ai-detection-20260508-test",
+          "Run": "2026-09-20-11-46-11",
+          "Roc-Auc": 0.913,
+          "Brier": 0.824,
+          "C@1": 0.781,
+          "F1": 0.82,
+          "F05U": 0.896,
+          "Mean": 0.847
+        },
+        {
+          "Dataset": "pan26-generative-ai-detection-20260507-test",
+          "Run": "2026-09-20-11-36-09",
+          "Roc-Auc": 0.773,
+          "Brier": 0.704,
+          "C@1": 0.625,
+          "F1": 0.681,
+          "F05U": 0.814,
+          "Mean": 0.719
+        },
+        {
+          "Dataset": "eloquent-20260617-test",
+          "Run": "2026-09-20-11-35-53",
+          "Roc-Auc": 0.815,
+          "Brier": 0.627,
+          "C@1": 0.575,
+          "F1": 0.713,
+          "F05U": 0.859,
+          "Mean": 0.718
+        },
+        {
+          "Dataset": "pan26-generative-ai-detection-smoke-test-20260330-training",
+          "Run": "2026-09-20-11-34-44",
+          "Roc-Auc": 0.889,
+          "Brier": 0.828,
+          "C@1": 0.824,
+          "F1": 0.769,
+          "F05U": 0.893,
+          "Mean": 0.84
+        }
+      ],
+      "pan26": {
+        "Dataset": "pan26-generative-ai-detection-20260507-test",
+        "Run": "2026-09-20-11-36-09",
+        "Roc-Auc": 0.773,
+        "Brier": 0.704,
+        "C@1": 0.625,
+        "F1": 0.681,
+        "F05U": 0.814,
+        "Mean": 0.719
+      }
+    },
+    {
+      "name": "flaird-modernbert-large-concatenation-single-task",
+      "config": {
+        "model_name_or_path": null,
+        "tokenizer_name_or_path": "answerdotai/ModernBERT-large",
+        "encoder_name_or_path": "answerdotai/ModernBERT-large",
+        "fusion_type": "concatenation",
+        "use_generator_classifier": false,
+        "num_generator_labels": 0,
+        "generator_loss_weight": 0.0,
+        "pos_weight": 0.0311727005543984,
+        "generator_class_weights": [
+          0.0422151,
+          0.06678689,
+          0.04729609,
+          0.06691101,
+          0.04726863,
+          0.97986811,
+          1.69372451,
+          1.71478915,
+          3.12307358,
+          3.08830738,
+          0.12975964
+        ],
+        "freeze_encoder": false,
+        "max_seq_length": 512,
+        "dataset_train_path": "MahmoodAnaam/flaird-raid-pan26",
+        "dataset_train_config_name": "flaird_train_features",
+        "dataset_validation_path": "MahmoodAnaam/flaird-raid-pan26",
+        "dataset_validation_config_name": "flaird_validation_features",
+        "shuffle_train_dataset": true,
+        "dataset_cache_dir": "/content/drive/MyDrive/flaird/dataset",
+        "output_dir": "/content/drive/MyDrive/flaird/flaird_outputs/flaird-modernbert-large-concatenation-single-task",
+        "run_name": "flaird-modernbert-large-concatenation-single-task",
+        "num_train_epochs": 1,
+        "per_device_train_batch_size": 128,
+        "per_device_eval_batch_size": 128,
+        "seed": 42,
+        "learning_rate": 2e-05,
+        "weight_decay": 0.01,
+        "warmup_steps": 0.06,
+        "lr_scheduler_type": "cosine",
+        "optim": "adamw_torch_fused",
+        "max_grad_norm": 1.0,
+        "eval_strategy": "steps",
+        "eval_steps": 0.1,
+        "save_strategy": "steps",
+        "save_steps": 0.1,
+        "save_total_limit": 2,
+        "load_best_model_at_end": true,
+        "metric_for_best_model": "loss",
+        "greater_is_better": false,
+        "logging_strategy": "steps",
+        "logging_steps": 200,
+        "logging_first_step": true,
+        "report_to": [
+          "wandb",
+          "tensorboard"
+        ],
+        "bf16": true,
+        "dataloader_num_workers": 4,
+        "dataloader_pin_memory": true,
+        "gradient_checkpointing": false,
+        "remove_unused_columns": false,
+        "label_names": [
+          "labels",
+          "generator_labels"
+        ],
+        "push_to_hub": true,
+        "hub_model_id": "MahmoodAnaam/flaird-modernbert-large-concatenation-single-task",
+        "hub_strategy": "checkpoint",
+        "resume_from_checkpoint": null
+      },
+      "evaluations": [
+        {
+          "Dataset": "pan25-generative-ai-detection-20260508-test",
+          "Run": "2026-09-20-11-12-57",
+          "Roc-Auc": 0.986,
+          "Brier": 0.933,
+          "C@1": 0.924,
+          "F1": 0.942,
+          "F05U": 0.973,
+          "Mean": 0.952
+        },
+        {
+          "Dataset": "eloquent-20260617-test",
+          "Run": "2026-09-20-11-07-58",
+          "Roc-Auc": 0.804,
+          "Brier": 0.687,
+          "C@1": 0.663,
+          "F1": 0.789,
+          "F05U": 0.894,
+          "Mean": 0.767
+        },
+        {
+          "Dataset": "pan26-generative-ai-detection-20260507-test",
+          "Run": "2026-09-20-11-06-49",
+          "Roc-Auc": 0.83,
+          "Brier": 0.722,
+          "C@1": 0.671,
+          "F1": 0.729,
+          "F05U": 0.848,
+          "Mean": 0.76
+        },
+        {
+          "Dataset": "pan26-generative-ai-detection-smoke-test-20260330-training",
+          "Run": "2026-09-20-11-00-49",
+          "Roc-Auc": 0.965,
+          "Brier": 0.955,
+          "C@1": 0.941,
+          "F1": 0.933,
+          "F05U": 0.972,
+          "Mean": 0.953
+        }
+      ],
+      "pan26": {
+        "Dataset": "pan26-generative-ai-detection-20260507-test",
+        "Run": "2026-09-20-11-06-49",
+        "Roc-Auc": 0.83,
+        "Brier": 0.722,
+        "C@1": 0.671,
+        "F1": 0.729,
+        "F05U": 0.848,
+        "Mean": 0.76
+      }
+    }
+  ],
+  "raid": {
+    "date_released": "2026-09-30",
+    "score_records": 10881,
+    "score_agg": {
+      "all": {
+        "domain": "all",
+        "model": "all",
+        "decoding": "all",
+        "repetition_penalty": "all",
+        "attack": "all",
+        "accuracy": {
+          "0.05": {
+            "tp": 651284,
+            "fn": 1516,
+            "accuracy": 0.9976776960784314
+          },
+          "0.01": {
+            "tp": 646276,
+            "fn": 6524,
+            "accuracy": 0.9900061274509804
+          }
+        },
+        "auroc": 0.9987255193174275
+      },
+      "no_adversarial": {
+        "domain": "all",
+        "model": "all",
+        "decoding": "all",
+        "repetition_penalty": "all",
+        "attack": "none",
+        "accuracy": {
+          "0.05": {
+            "tp": 54376,
+            "fn": 24,
+            "accuracy": 0.9995588235294117
+          },
+          "0.01": {
+            "tp": 54270,
+            "fn": 130,
+            "accuracy": 0.997610294117647
+          }
+        },
+        "auroc": 0.9996453507965686
+      }
+    },
+    "single_axis_slices": {
+      "domain": [
+        {
+          "domain": "abstracts",
+          "model": "all",
+          "decoding": "all",
+          "repetition_penalty": "all",
+          "attack": "all",
+          "accuracy": {
+            "0.05": {
+              "tp": 81599,
+              "fn": 1,
+              "accuracy": 0.9999877450980392
+            },
+            "0.01": {
+              "tp": 81498,
+              "fn": 102,
+              "accuracy": 0.99875
+            }
+          },
+          "auroc": 0.997636833639706
+        },
+        {
+          "domain": "books",
+          "model": "all",
+          "decoding": "all",
+          "repetition_penalty": "all",
+          "attack": "all",
+          "accuracy": {
+            "0.05": {
+              "tp": 81413,
+              "fn": 187,
+              "accuracy": 0.9977083333333333
+            },
+            "0.01": {
+              "tp": 80870,
+              "fn": 730,
+              "accuracy": 0.9910539215686275
+            }
+          },
+          "auroc": 0.9981681959763072
+        },
+        {
+          "domain": "news",
+          "model": "all",
+          "decoding": "all",
+          "repetition_penalty": "all",
+          "attack": "all",
+          "accuracy": {
+            "0.05": {
+              "tp": 81598,
+              "fn": 2,
+              "accuracy": 0.9999754901960785
+            },
+            "0.01": {
+              "tp": 81363,
+              "fn": 237,
+              "accuracy": 0.9970955882352941
+            }
+          },
+          "auroc": 0.9995303870506536
+        },
+        {
+          "domain": "poetry",
+          "model": "all",
+          "decoding": "all",
+          "repetition_penalty": "all",
+          "attack": "all",
+          "accuracy": {
+            "0.05": {
+              "tp": 81288,
+              "fn": 312,
+              "accuracy": 0.9961764705882353
+            },
+            "0.01": {
+              "tp": 80939,
+              "fn": 661,
+              "accuracy": 0.9918995098039216
+            }
+          },
+          "auroc": 0.9991399382148693
+        },
+        {
+          "domain": "recipes",
+          "model": "all",
+          "decoding": "all",
+          "repetition_penalty": "all",
+          "attack": "all",
+          "accuracy": {
+            "0.05": {
+              "tp": 81600,
+              "fn": 0,
+              "accuracy": 1.0
+            },
+            "0.01": {
+              "tp": 81600,
+              "fn": 0,
+              "accuracy": 1.0
+            }
+          },
+          "auroc": 0.9999079299428104
+        },
+        {
+          "domain": "reddit",
+          "model": "all",
+          "decoding": "all",
+          "repetition_penalty": "all",
+          "attack": "all",
+          "accuracy": {
+            "0.05": {
+              "tp": 81136,
+              "fn": 464,
+              "accuracy": 0.994313725490196
+            },
+            "0.01": {
+              "tp": 80082,
+              "fn": 1518,
+              "accuracy": 0.9813970588235295
+            }
+          },
+          "auroc": 0.9984965328839868
+        },
+        {
+          "domain": "reviews",
+          "model": "all",
+          "decoding": "all",
+          "repetition_penalty": "all",
+          "attack": "all",
+          "accuracy": {
+            "0.05": {
+              "tp": 81099,
+              "fn": 501,
+              "accuracy": 0.9938602941176471
+            },
+            "0.01": {
+              "tp": 79144,
+              "fn": 2456,
+              "accuracy": 0.9699019607843137
+            }
+          },
+          "auroc": 0.9979525071486928
+        },
+        {
+          "domain": "wiki",
+          "model": "all",
+          "decoding": "all",
+          "repetition_penalty": "all",
+          "attack": "all",
+          "accuracy": {
+            "0.05": {
+              "tp": 81551,
+              "fn": 49,
+              "accuracy": 0.9993995098039216
+            },
+            "0.01": {
+              "tp": 80780,
+              "fn": 820,
+              "accuracy": 0.9899509803921569
+            }
+          },
+          "auroc": 0.9993113000408497
+        }
+      ],
+      "model": [
+        {
+          "domain": "all",
+          "model": "llama-chat",
+          "decoding": "all",
+          "repetition_penalty": "all",
+          "attack": "all",
+          "accuracy": {
+            "0.05": {
+              "tp": 76797,
+              "fn": 3,
+              "accuracy": 0.9999609375
+            },
+            "0.01": {
+              "tp": 76737,
+              "fn": 63,
+              "accuracy": 0.9991796875
+            }
+          },
+          "auroc": 0.9997929612901476
+        },
+        {
+          "domain": "all",
+          "model": "mpt",
+          "decoding": "all",
+          "repetition_penalty": "all",
+          "attack": "all",
+          "accuracy": {
+            "0.05": {
+              "tp": 76682,
+              "fn": 118,
+              "accuracy": 0.9984635416666666
+            },
+            "0.01": {
+              "tp": 76066,
+              "fn": 734,
+              "accuracy": 0.9904427083333334
+            }
+          },
+          "auroc": 0.9987458791097006
+        },
+        {
+          "domain": "all",
+          "model": "mpt-chat",
+          "decoding": "all",
+          "repetition_penalty": "all",
+          "attack": "all",
+          "accuracy": {
+            "0.05": {
+              "tp": 76781,
+              "fn": 19,
+              "accuracy": 0.9997526041666667
+            },
+            "0.01": {
+              "tp": 76587,
+              "fn": 213,
+              "accuracy": 0.9972265625
+            }
+          },
+          "auroc": 0.9995546885172527
+        },
+        {
+          "domain": "all",
+          "model": "gpt2",
+          "decoding": "all",
+          "repetition_penalty": "all",
+          "attack": "all",
+          "accuracy": {
+            "0.05": {
+              "tp": 76750,
+              "fn": 50,
+              "accuracy": 0.9993489583333334
+            },
+            "0.01": {
+              "tp": 76336,
+              "fn": 464,
+              "accuracy": 0.9939583333333334
+            }
+          },
+          "auroc": 0.9991951297336156
+        },
+        {
+          "domain": "all",
+          "model": "mistral",
+          "decoding": "all",
+          "repetition_penalty": "all",
+          "attack": "all",
+          "accuracy": {
+            "0.05": {
+              "tp": 76519,
+              "fn": 281,
+              "accuracy": 0.9963411458333333
+            },
+            "0.01": {
+              "tp": 75693,
+              "fn": 1107,
+              "accuracy": 0.9855859375
+            }
+          },
+          "auroc": 0.9980955339219835
+        },
+        {
+          "domain": "all",
+          "model": "mistral-chat",
+          "decoding": "all",
+          "repetition_penalty": "all",
+          "attack": "all",
+          "accuracy": {
+            "0.05": {
+              "tp": 76783,
+              "fn": 17,
+              "accuracy": 0.9997786458333333
+            },
+            "0.01": {
+              "tp": 76609,
+              "fn": 191,
+              "accuracy": 0.9975130208333334
+            }
+          },
+          "auroc": 0.9995628309461805
+        },
+        {
+          "domain": "all",
+          "model": "gpt3",
+          "decoding": "all",
+          "repetition_penalty": "all",
+          "attack": "all",
+          "accuracy": {
+            "0.05": {
+              "tp": 38364,
+              "fn": 36,
+              "accuracy": 0.9990625
+            },
+            "0.01": {
+              "tp": 38150,
+              "fn": 250,
+              "accuracy": 0.9934895833333334
+            }
+          },
+          "auroc": 0.9988147521972656
+        },
+        {
+          "domain": "all",
+          "model": "cohere",
+          "decoding": "all",
+          "repetition_penalty": "all",
+          "attack": "all",
+          "accuracy": {
+            "0.05": {
+              "tp": 37763,
+              "fn": 637,
+              "accuracy": 0.9834114583333333
+            },
+            "0.01": {
+              "tp": 36259,
+              "fn": 2141,
+              "accuracy": 0.9442447916666666
+            }
+          },
+          "auroc": 0.993776237657335
+        },
+        {
+          "domain": "all",
+          "model": "chatgpt",
+          "decoding": "all",
+          "repetition_penalty": "all",
+          "attack": "all",
+          "accuracy": {
+            "0.05": {
+              "tp": 38377,
+              "fn": 23,
+              "accuracy": 0.9994010416666667
+            },
+            "0.01": {
+              "tp": 38318,
+              "fn": 82,
+              "accuracy": 0.9978645833333334
+            }
+          },
+          "auroc": 0.9996649848090279
+        },
+        {
+          "domain": "all",
+          "model": "gpt4",
+          "decoding": "all",
+          "repetition_penalty": "all",
+          "attack": "all",
+          "accuracy": {
+            "0.05": {
+              "tp": 38386,
+              "fn": 14,
+              "accuracy": 0.9996354166666667
+            },
+            "0.01": {
+              "tp": 38288,
+              "fn": 112,
+              "accuracy": 0.9970833333333333
+            }
+          },
+          "auroc": 0.9995722052680123
+        },
+        {
+          "domain": "all",
+          "model": "cohere-chat",
+          "decoding": "all",
+          "repetition_penalty": "all",
+          "attack": "all",
+          "accuracy": {
+            "0.05": {
+              "tp": 38082,
+              "fn": 318,
+              "accuracy": 0.99171875
+            },
+            "0.01": {
+              "tp": 37233,
+              "fn": 1167,
+              "accuracy": 0.969609375
+            }
+          },
+          "auroc": 0.9966116014268663
+        }
+      ],
+      "decoding": [
+        {
+          "domain": "all",
+          "model": "all",
+          "decoding": "greedy",
+          "repetition_penalty": "all",
+          "attack": "all",
+          "accuracy": {
+            "0.05": {
+              "tp": 325961,
+              "fn": 439,
+              "accuracy": 0.9986550245098039
+            },
+            "0.01": {
+              "tp": 324639,
+              "fn": 1761,
+              "accuracy": 0.9946047794117647
+            }
+          },
+          "auroc": 0.9992617224200879
+        },
+        {
+          "domain": "all",
+          "model": "all",
+          "decoding": "sampling",
+          "repetition_penalty": "all",
+          "attack": "all",
+          "accuracy": {
+            "0.05": {
+              "tp": 325323,
+              "fn": 1077,
+              "accuracy": 0.9967003676470588
+            },
+            "0.01": {
+              "tp": 321637,
+              "fn": 4763,
+              "accuracy": 0.985407475490196
+            }
+          },
+          "auroc": 0.9981893162147671
+        }
+      ],
+      "repetition_penalty": [
+        {
+          "domain": "all",
+          "model": "all",
+          "decoding": "all",
+          "repetition_penalty": "no",
+          "attack": "all",
+          "accuracy": {
+            "0.05": {
+              "tp": 420939,
+              "fn": 1461,
+              "accuracy": 0.9965411931818182
+            },
+            "0.01": {
+              "tp": 416421,
+              "fn": 5979,
+              "accuracy": 0.9858451704545454
+            }
+          },
+          "auroc": 0.9982606591426965
+        },
+        {
+          "domain": "all",
+          "model": "all",
+          "decoding": "all",
+          "repetition_penalty": "yes",
+          "attack": "all",
+          "accuracy": {
+            "0.05": {
+              "tp": 230345,
+              "fn": 55,
+              "accuracy": 0.9997612847222223
+            },
+            "0.01": {
+              "tp": 229855,
+              "fn": 545,
+              "accuracy": 0.9976345486111111
+            }
+          },
+          "auroc": 0.999577762971101
+        }
+      ],
+      "attack": [
+        {
+          "domain": "all",
+          "model": "all",
+          "decoding": "all",
+          "repetition_penalty": "all",
+          "attack": "none",
+          "accuracy": {
+            "0.05": {
+              "tp": 54376,
+              "fn": 24,
+              "accuracy": 0.9995588235294117
+            },
+            "0.01": {
+              "tp": 54270,
+              "fn": 130,
+              "accuracy": 0.997610294117647
+            }
+          },
+          "auroc": 0.9996453507965686
+        },
+        {
+          "domain": "all",
+          "model": "all",
+          "decoding": "all",
+          "repetition_penalty": "all",
+          "attack": "whitespace",
+          "accuracy": {
+            "0.05": {
+              "tp": 54361,
+              "fn": 39,
+              "accuracy": 0.9992830882352941
+            },
+            "0.01": {
+              "tp": 54266,
+              "fn": 134,
+              "accuracy": 0.9975367647058824
+            }
+          },
+          "auroc": 0.9996548718022366
+        },
+        {
+          "domain": "all",
+          "model": "all",
+          "decoding": "all",
+          "repetition_penalty": "all",
+          "attack": "upper_lower",
+          "accuracy": {
+            "0.05": {
+              "tp": 54366,
+              "fn": 34,
+              "accuracy": 0.999375
+            },
+            "0.01": {
+              "tp": 54260,
+              "fn": 140,
+              "accuracy": 0.9974264705882353
+            }
+          },
+          "auroc": 0.9996394162645527
+        },
+        {
+          "domain": "all",
+          "model": "all",
+          "decoding": "all",
+          "repetition_penalty": "all",
+          "attack": "synonym",
+          "accuracy": {
+            "0.05": {
+              "tp": 54321,
+              "fn": 79,
+              "accuracy": 0.998547794117647
+            },
+            "0.01": {
+              "tp": 54150,
+              "fn": 250,
+              "accuracy": 0.9954044117647058
+            }
+          },
+          "auroc": 0.9993405278224571
+        },
+        {
+          "domain": "all",
+          "model": "all",
+          "decoding": "all",
+          "repetition_penalty": "all",
+          "attack": "perplexity_misspelling",
+          "accuracy": {
+            "0.05": {
+              "tp": 54367,
+              "fn": 33,
+              "accuracy": 0.9993933823529412
+            },
+            "0.01": {
+              "tp": 54258,
+              "fn": 142,
+              "accuracy": 0.997389705882353
+            }
+          },
+          "auroc": 0.9996098752489276
+        },
+        {
+          "domain": "all",
+          "model": "all",
+          "decoding": "all",
+          "repetition_penalty": "all",
+          "attack": "paraphrase",
+          "accuracy": {
+            "0.05": {
+              "tp": 53983,
+              "fn": 417,
+              "accuracy": 0.9923345588235294
+            },
+            "0.01": {
+              "tp": 52265,
+              "fn": 2135,
+              "accuracy": 0.9607536764705882
+            }
+          },
+          "auroc": 0.9942843501072304
+        },
+        {
+          "domain": "all",
+          "model": "all",
+          "decoding": "all",
+          "repetition_penalty": "all",
+          "attack": "number",
+          "accuracy": {
+            "0.05": {
+              "tp": 54376,
+              "fn": 24,
+              "accuracy": 0.9995588235294117
+            },
+            "0.01": {
+              "tp": 54266,
+              "fn": 134,
+              "accuracy": 0.9975367647058824
+            }
+          },
+          "auroc": 0.9996328168083639
+        },
+        {
+          "domain": "all",
+          "model": "all",
+          "decoding": "all",
+          "repetition_penalty": "all",
+          "attack": "insert_paragraphs",
+          "accuracy": {
+            "0.05": {
+              "tp": 54340,
+              "fn": 60,
+              "accuracy": 0.9988970588235294
+            },
+            "0.01": {
+              "tp": 54171,
+              "fn": 229,
+              "accuracy": 0.9957904411764706
+            }
+          },
+          "auroc": 0.9993211143344056
+        },
+        {
+          "domain": "all",
+          "model": "all",
+          "decoding": "all",
+          "repetition_penalty": "all",
+          "attack": "homoglyph",
+          "accuracy": {
+            "0.05": {
+              "tp": 54165,
+              "fn": 235,
+              "accuracy": 0.9956801470588236
+            },
+            "0.01": {
+              "tp": 53599,
+              "fn": 801,
+              "accuracy": 0.9852757352941176
+            }
+          },
+          "auroc": 0.9984136958103553
+        },
+        {
+          "domain": "all",
+          "model": "all",
+          "decoding": "all",
+          "repetition_penalty": "all",
+          "attack": "article_deletion",
+          "accuracy": {
+            "0.05": {
+              "tp": 54370,
+              "fn": 30,
+              "accuracy": 0.9994485294117647
+            },
+            "0.01": {
+              "tp": 54276,
+              "fn": 124,
+              "accuracy": 0.9977205882352941
+            }
+          },
+          "auroc": 0.9996863128063725
+        },
+        {
+          "domain": "all",
+          "model": "all",
+          "decoding": "all",
+          "repetition_penalty": "all",
+          "attack": "alternative_spelling",
+          "accuracy": {
+            "0.05": {
+              "tp": 54373,
+              "fn": 27,
+              "accuracy": 0.9995036764705882
+            },
+            "0.01": {
+              "tp": 54263,
+              "fn": 137,
+              "accuracy": 0.9974816176470588
+            }
+          },
+          "auroc": 0.999630122644761
+        },
+        {
+          "domain": "all",
+          "model": "all",
+          "decoding": "all",
+          "repetition_penalty": "all",
+          "attack": "zero_width_space",
+          "accuracy": {
+            "0.05": {
+              "tp": 53886,
+              "fn": 514,
+              "accuracy": 0.9905514705882353
+            },
+            "0.01": {
+              "tp": 52232,
+              "fn": 2168,
+              "accuracy": 0.9601470588235295
+            }
+          },
+          "auroc": 0.9958477773628983
+        }
+      ]
+    },
+    "thresholds": {
+      "0.05": {
+        "abstracts": 0.000578372208875022,
+        "books": 0.295424560027,
+        "news": 0.000208983392624984,
+        "poetry": 0.11390797265050001,
+        "recipes": 9.715884428129762e-05,
+        "reddit": 0.10604191372600003,
+        "reviews": 0.09086896055750004,
+        "wiki": 0.006418087106500048
+      },
+      "0.01": {
+        "abstracts": 0.03222510072450002,
+        "books": 0.889174560027,
+        "news": 0.12786401268949998,
+        "poetry": 0.5201579726505,
+        "recipes": 0.0003947052310000476,
+        "reddit": 0.777916913726,
+        "reviews": 0.9189939605575002,
+        "wiki": 0.5083712121065
+      }
+    },
+    "fpr": {
+      "0.05": {
+        "abstracts": 0.050000000000000044,
+        "books": 0.050000000000000044,
+        "news": 0.050000000000000044,
+        "poetry": 0.050000000000000044,
+        "recipes": 0.050000000000000044,
+        "reddit": 0.050000000000000044,
+        "reviews": 0.050000000000000044,
+        "wiki": 0.050000000000000044
+      },
+      "0.01": {
+        "abstracts": 0.010000000000000009,
+        "books": 0.010000000000000009,
+        "news": 0.010000000000000009,
+        "poetry": 0.010000000000000009,
+        "recipes": 0.010000000000000009,
+        "reddit": 0.010000000000000009,
+        "reviews": 0.010000000000000009,
+        "wiki": 0.010000000000000009
+      }
+    }
+  }
+}

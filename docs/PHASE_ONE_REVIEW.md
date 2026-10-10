@@ -1,5 +1,7 @@
 # Phase one: repository review and explanation readiness
 
+> Historical phase-one snapshot. The interface and comprehensive research documentation were completed in later phases; see [the current documentation index](README.md).
+
 ## Delivery boundary
 
 This phase completes the explanation backend, its runnable export command, functional validation, and detailed explanation documentation. It assumes the eight configured experiments have already finished training and evaluation. It does not initiate another training run or replace benchmark results.
