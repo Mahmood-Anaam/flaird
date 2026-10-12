@@ -35,6 +35,7 @@ repository = "https://github.com/Mahmood-Anaam/flaird"
 [project.scripts]
 flaird-train = "flaird.scripts.train:main"
 flaird-evaluator = "flaird.scripts.evaluator:main"
+flaird-predict = "flaird.scripts.predict:main"
 flaird-tira-test = "flaird.scripts.tira_test:main"
 flaird-raid-test = "flaird.scripts.raid_test:main"
 
