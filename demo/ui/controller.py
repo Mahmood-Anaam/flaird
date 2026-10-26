@@ -57,6 +57,15 @@ class ModelRegistry:
         self._cache: dict[str, tuple[Any, Any]] = {}
         self._lock = threading.Lock()
 
+    def __getstate__(self) -> dict[str, Any]:
+        state = self.__dict__.copy()
+        del state["_lock"]
+        return state
+
+    def __setstate__(self, state: dict[str, Any]) -> None:
+        self.__dict__.update(state)
+        self._lock = threading.Lock()
+
     def get(self, model_id: str) -> tuple[Any, Any]:
         with self._lock:
             if model_id not in self._cache:
