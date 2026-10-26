@@ -36,10 +36,11 @@ def _sign_class(value: float) -> str:
 def header_html() -> str:
     return """
 <div class="fx-header"><div class="fx-inner">
-  <div class="fx-logo">FLAIRD<small>Forensic Linguistic and AI-Integrated Robust Detector</small></div>
+  <div class="fx-brand"><span class="fx-logomark" aria-hidden="true">F</span>
+    <div class="fx-logo">FLAIRD<small>Forensic Linguistic and AI-Integrated Robust Detector</small></div></div>
   <nav aria-label="Project links">
     <a href="https://github.com/Mahmood-Anaam/flaird" target="_blank" rel="noopener">GitHub</a>
-    <a href="https://huggingface.co/MahmoodAnaam" target="_blank" rel="noopener">Models</a>
+    <a href="https://huggingface.co/collections/MahmoodAnaam/flaird" target="_blank" rel="noopener">Model collection ↗</a>
   </nav>
 </div></div>"""
 
@@ -57,7 +58,7 @@ def _kpi(
 
 
 def hero_html(explanation: FlairdExplanation | None = None) -> str:
-    """Blue strip with the four headline numbers (placeholders before an analysis)."""
+    """Research header with four high-contrast result tiles and initial placeholders."""
     if explanation is None:
         tiles = [
             _kpi("Machine score", "—", "run an analysis"),
@@ -100,6 +101,7 @@ def hero_html(explanation: FlairdExplanation | None = None) -> str:
         ]
     return f"""
 <div class="fx-hero"><div class="fx-inner">
+  <div class="fx-eyebrow">RESEARCH DEMONSTRATOR · ENGLISH TEXT</div>
   <h1>AI-Text Forensic Analysis</h1>
   <p>Detects machine-generated text and explains the decision: how meaning and writing style
   contributed, and which forensic indicators mattered.</p>
@@ -123,14 +125,14 @@ def stat(label: str, value: str, css: str = "") -> str:
 
 def balance_panel(balance: PathBalance) -> str:
     gate = (
-        stat("Fusion gate (semantic reliance)", f"{balance.gate:.2f}")
+        stat("Mean fusion gate", f"{balance.gate:.2f}")
         if balance.gate is not None
         else stat("Fusion gate", "n/a for this architecture")
     )
     return (
         '<div class="fx-panel"><div class="fx-bigcap">Semantic-anchored decomposition</div>'
         + stat(
-            "Semantic path (neutral forensic input)", f"{balance.semantic_logit:+.2f}"
+            "Baseline-forensic logit", f"{balance.semantic_logit:+.2f}"
         )
         + stat(
             "Forensic contribution",
@@ -139,7 +141,7 @@ def balance_panel(balance: PathBalance) -> str:
         )
         + stat("Final logit", f"{balance.final_logit:+.2f}")
         + stat(
-            "Share of semantic / forensic",
+            "Baseline / forensic magnitudes",
             f"{balance.semantic_share:.0%} / {balance.forensic_share:.0%}",
         )
         + gate
@@ -205,8 +207,9 @@ def gate_meta(balance: PathBalance) -> str:
     )
     return (
         f'<div class="fx-gauge-meta">{badge(word, kind)}</div>'
-        '<div class="fx-caption">Mean fusion gate: values near 1 mean the fused representation '
-        "is dominated by the text encoder, values near 0 by the forensic features.</div>"
+        '<div class="fx-caption">Mean gate before the final fusion projection: values near 1 favor '
+        "the semantic state in the gated mixture; values near 0 favor the forensic context. "
+        "This is not a percentage of decision importance.</div>"
     )
 
 
@@ -226,7 +229,7 @@ def caption_groups(groups: list[GroupAttribution]) -> str:
 
 def caption_waterfall(balance: PathBalance) -> str:
     return (
-        f"Without forensic evidence the model would output <b>{balance.semantic_logit:+.2f}</b>; "
+        f"With all raw forensic features set to zero the model would output <b>{balance.semantic_logit:+.2f}</b>; "
         f"the forensic stream adds <b>{balance.forensic_delta:+.2f}</b>, giving a final logit of "
         f"<b>{balance.final_logit:+.2f}</b>."
     )
@@ -334,9 +337,10 @@ lexical diversity or punctuation habits). The explanation follows the same hiera
 training objective down-weights the majority class), so it is not a calibrated probability.
 Scores between 0.35 and 0.65 are reported as inconclusive.
 
-**Path balance.** The semantic logit is the decision the model would make if the forensic
-stream carried no information (all features set to zero). The forensic contribution is what the
-forensic stream adds on top. Both always add up to the final logit.
+**Path balance.** The baseline logit is the hybrid model's output with all raw forensic
+features set to zero. Learned biases can still produce nonzero feature tokens. The forensic
+contribution is the difference from that reference; both add up to the final logit.
+The displayed shares compare absolute logit magnitudes, not causal importance percentages.
 
 **Feature groups (Shapley values).** For each group, the contribution is the average change of the
 logit when the group is switched on, over all combinations of the other groups. Positive values
@@ -344,7 +348,8 @@ push toward *machine*, negative values toward *human*. The values add up exactly
 contribution.
 
 **Features (Owen values).** The same idea one level deeper: contributions of individual features
-inside their group. The features of a group always add up to the group's value.
+inside their group. Exact feature values add up to the group's value. In sampled mode,
+features are estimates with sampling error, while group values remain exact.
 
 **Attention versus contribution.** Fusion attention shows where the model *looked*; contribution
 shows what *changed* the decision. Attention is not an explanation by itself, which is why both are
@@ -352,7 +357,7 @@ shown together.
 
 ### Limits
 
-- Contributions are relative to a baseline of "no forensic information"; they explain the model,
+- Contributions are relative to a baseline of zero raw forensic measurements; they explain the model,
   not the ground truth.
 - Texts shorter than about 30 words, or very long texts (only the first 512 tokens are read by the
   encoder), are less reliable. Hidden characters and look-alike letters are flagged.

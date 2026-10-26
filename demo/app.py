@@ -122,7 +122,7 @@ def build_app(controller: DashboardController | None = None) -> gr.Blocks:
                             components["reliability_meta"] = gr.HTML(
                                 initial.reliability_meta
                             )
-                        with _card("Semantic reliance"):
+                        with _card("Fusion gate"):
                             components["gate_plot"] = gr.Plot(
                                 initial.gate_plot, show_label=False, container=False
                             )
@@ -208,17 +208,18 @@ def build_app(controller: DashboardController | None = None) -> gr.Blocks:
 
         outputs = [components[name] for name in OUTPUT_FIELDS]
 
-        def run(text_value, model_label, precision_value, progress=gr.Progress()):  # noqa: B008 - Gradio injects the tracker
-            return controller.analyze(
-                text_value, model_label, precision_value, progress
-            )
+        def run(text_value, model_label, precision_value):
+            return controller.analyze(text_value, model_label, precision_value)
 
-        analyze.click(run, [text, model, precision], outputs, show_progress="full")
-        example.change(controller.load_example, example, [text, example_chip])
+        analyze.click(run, [text, model, precision], outputs, show_progress="hidden")
+        example.change(
+            controller.load_example, example, [text, example_chip], show_progress="hidden"
+        )
         clear.click(
             lambda: ("", None, "", *empty_view().as_tuple()),
             None,
             [text, example, example_chip, *outputs],
+            show_progress="hidden",
         )
     return app
 

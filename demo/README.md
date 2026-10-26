@@ -12,4 +12,13 @@ license: apache-2.0
 short_description: FLAIRD:Forensic Linguistic and AI-Integrated Robust Detector
 ---
 
-Check out the configuration reference at https://huggingface.co/docs/hub/spaces-config-reference
+
+# FLAIRD research dashboard
+
+English AI-generated text detection with forensic feature explanations.
+
+- [Model collection](https://huggingface.co/collections/MahmoodAnaam/flaird)
+- [Source and documentation](https://github.com/Mahmood-Anaam/flaird)
+- [Dashboard guide](https://github.com/Mahmood-Anaam/flaird/blob/develop/docs/DEMO.md)
+
+Scores are uncalibrated model outputs. The system supports human review and does not verify truthfulness, intent or campaign coordination.
