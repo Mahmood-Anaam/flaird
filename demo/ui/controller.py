@@ -46,7 +46,6 @@ DEFAULT_MODELS = (
 )
 
 
-@spaces.GPU
 class ModelRegistry:
     """Loads checkpoints lazily and keeps at most ``max_loaded`` in memory."""
 
