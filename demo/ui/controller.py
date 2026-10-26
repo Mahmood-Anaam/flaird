@@ -46,7 +46,6 @@ DEFAULT_MODELS = (
 )
 
 
-@spaces.GPU
 class ModelRegistry:
     """Loads checkpoints lazily and keeps at most ``max_loaded`` in memory."""
 
@@ -56,6 +55,15 @@ class ModelRegistry:
         self._loader = loader
         self._max_loaded = max_loaded
         self._cache: dict[str, tuple[Any, Any]] = {}
+        self._lock = threading.Lock()
+
+    def __getstate__(self) -> dict[str, Any]:
+        state = self.__dict__.copy()
+        del state["_lock"]
+        return state
+
+    def __setstate__(self, state: dict[str, Any]) -> None:
+        self.__dict__.update(state)
         self._lock = threading.Lock()
 
     def get(self, model_id: str) -> tuple[Any, Any]:
