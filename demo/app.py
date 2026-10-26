@@ -1,8 +1,12 @@
 from __future__ import annotations
 
+import sys
 from pathlib import Path
 
 import gradio as gr
+
+sys.path.insert(0, str(Path(__file__).parent))
+
 from ui import components as ui
 from ui.controller import (
     OUTPUT_FIELDS,
@@ -13,7 +17,7 @@ from ui.controller import (
 )
 from ui.theme import HEAD, build_css, build_theme
 
-EXAMPLES_PATH = Path("examples.csv")
+EXAMPLES_PATH = Path(__file__).parent / "examples.csv"
 FOOTER = (
     "FLAIRD is a decision-support tool. Scores are prior-adjusted model outputs, not calibrated "
     "probabilities, and explanations describe the model's behavior, not ground truth."
