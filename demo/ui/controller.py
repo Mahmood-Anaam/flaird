@@ -10,6 +10,7 @@ from pathlib import Path
 from typing import Any
 
 import pandas as pd
+import spaces
 
 from flaird.utils.explain import ExplainConfig, FlairdExplainer, FlairdExplanation
 
@@ -45,6 +46,7 @@ DEFAULT_MODELS = (
 )
 
 
+@spaces.GPU
 class ModelRegistry:
     """Loads checkpoints lazily and keeps at most ``max_loaded`` in memory."""
 
@@ -226,6 +228,7 @@ class DashboardController:
         return str(row["text"]), ui.example_chip(row.to_dict())
 
     # -- analysis ----------------------------------------------------------------------
+    @spaces.GPU
     def analyze(
         self, text: str, model_label: str, precision: str, progress=None
     ) -> tuple:

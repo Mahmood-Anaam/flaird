@@ -1,4 +1,4 @@
-name: Sync GitHub to Hugging Face Hub
+name: Sync to Hugging Face Hub
 on:
   workflow_dispatch:
     inputs:
@@ -15,7 +15,7 @@ on:
         private:
             description: "Whether the repository should be private (true/false)"
             required: false
-            default: false
+            default: true
             type: boolean
         space_sdk:
             description: "Space SDK to use (gradio, streamlit, docker, static)"
