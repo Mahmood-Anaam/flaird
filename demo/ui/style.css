@@ -1,14 +1,15 @@
-/* ---------- Base ---------- */
+/* Component-scoped styling: Gradio form wrappers retain their native spacing. */
 html,
 body {
-  margin: 0 !important;
+  margin: 0;
+  color-scheme: light;
 }
 
 body,
 .gradio-container {
   background: var(--page-bg) !important;
-  font-family: var(--font) !important;
   color: var(--text);
+  font-family: var(--font) !important;
 }
 
 .gradio-container {
@@ -16,11 +17,12 @@ body,
   padding: 0 !important;
 }
 
-.gradio-container .main,
-.gradio-container .wrap,
-.gradio-container .contain {
-  max-width: none !important;
+.gradio-container>.main,
+.gradio-container main.contain {
   padding: 0 !important;
+}
+
+.gradio-container main.contain>.column {
   gap: 0 !important;
 }
 
@@ -29,247 +31,326 @@ footer,
   display: none !important;
 }
 
-.fx-num {
-  font-variant-numeric: tabular-nums;
-}
-
 .fx-inner {
   max-width: 1280px;
   margin: 0 auto;
-  padding: 0 24px;
+  padding: 0 32px;
+  box-sizing: border-box;
 }
 
-/* ---------- Header and hero (blue) ---------- */
+.fx-bleed,
+.fx-bleed.block {
+  padding: 0 !important;
+  margin: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  min-height: 0 !important;
+  width: 100%;
+}
+
+.fx-bleed>div:not(.fx-header):not(.fx-hero),
+.fx-bleed .prose {
+  max-width: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+/* Quiet masthead, distinct research workspace and high-contrast result tiles. */
 .fx-header {
-  background: var(--primary);
-  color: #fff;
+  background: #fff;
+  border-bottom: 1px solid var(--track);
 }
 
 .fx-header .fx-inner {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: 60px;
+  min-height: 88px;
+  gap: 24px;
+}
+
+.fx-brand {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-width: 0;
+}
+
+.fx-logomark {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 46px;
+  flex: 0 0 auto;
+  border-radius: 13px 13px 13px 3px;
+  background: var(--primary-dark);
+  color: #fff;
+  font-size: 25px;
+  font-weight: 700;
 }
 
 .fx-logo {
-  font-size: 22px;
+  color: var(--primary-dark);
+  font-size: 23px;
   font-weight: 700;
-  letter-spacing: .04em;
+  letter-spacing: .08em;
+  line-height: 1.25;
 }
 
 .fx-logo small {
-  font-size: 12px;
+  display: block;
+  margin-top: 4px;
+  font-size: 11px;
   font-weight: 500;
-  opacity: .75;
-  margin-left: 12px;
-  letter-spacing: 0;
+  letter-spacing: .01em;
+  color: var(--text-muted);
 }
 
 .fx-header nav {
   display: flex;
-  gap: 20px;
+  flex-shrink: 0;
+  gap: 12px;
   font-size: 13px;
-  font-weight: 500;
 }
 
 .fx-header nav a {
-  color: #fff;
-  opacity: .85;
+  color: var(--primary-dark);
   text-decoration: none;
-  padding: 4px 0;
-  border-bottom: 2px solid transparent;
+  padding: 9px 13px;
+  border: 1px solid var(--track);
+  border-radius: 9px;
 }
 
-.fx-header nav a:hover,
-.fx-header nav a:focus-visible {
-  opacity: 1;
-  border-bottom-color: var(--accent);
-  outline: none;
+.fx-header nav a:hover {
+  background: var(--panel-bg);
+  border-color: var(--primary);
+}
+
+.fx-header nav a:focus-visible,
+.fx-tabs button[role="tab"]:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 3px;
 }
 
 .fx-hero {
-  background: var(--primary);
+  background: linear-gradient(120deg, #142D50, #203F65);
+  padding: 34px 0 30px;
   color: #fff;
-  padding: 8px 0 28px;
+}
+
+.fx-eyebrow {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: .15em;
+  color: #A9DAE1;
+  margin-bottom: 12px;
 }
 
 .fx-hero h1 {
-  font-size: 22px;
-  font-weight: 600;
-  margin: 4px 0 2px;
-  color: #fff;
+  color: #fff !important;
+  font-size: clamp(25px, 3vw, 34px);
+  font-weight: 650;
+  line-height: 1.2;
+  border: 0 !important;
+  margin: 0 0 12px !important;
+  letter-spacing: -.025em;
 }
 
 .fx-hero p {
-  margin: 0 0 18px;
-  font-size: 13px;
-  opacity: .8;
-  max-width: 70ch;
+  color: #D6E2F0 !important;
+  font-size: 14px;
+  line-height: 1.7;
+  max-width: 78ch;
+  margin: 0 0 26px;
 }
 
 .fx-kpis {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
-  gap: 12px;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
 }
 
 .fx-kpi {
-  background: rgba(255, 255, 255, .12);
-  border: 1px solid rgba(255, 255, 255, .2);
+  background: #fff;
+  border: 1px solid #DCE5EF;
   border-radius: 12px;
-  padding: 14px 18px;
-  min-height: 84px;
+  padding: 17px 18px;
+  min-height: 112px;
+  box-sizing: border-box;
+  color: var(--text);
 }
 
 .fx-kpi .lab {
-  font-size: 12px;
-  opacity: .8;
+  color: var(--text-muted);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: .025em;
 }
 
 .fx-kpi .val {
-  font-size: 26px;
+  color: var(--primary-dark);
+  font-size: 29px;
   font-weight: 700;
-  line-height: 1.25;
-  margin-top: 4px;
+  line-height: 1.35;
+  margin-top: 6px;
   font-variant-numeric: tabular-nums;
+  overflow-wrap: anywhere;
 }
 
 .fx-kpi .val.small {
-  font-size: 18px;
-  padding-top: 5px;
+  font-size: 16px;
+  min-height: 39px;
+  display: flex;
+  align-items: center;
 }
 
 .fx-kpi .sub {
+  color: var(--text-muted);
   font-size: 11px;
-  opacity: .75;
-  margin-top: 2px;
+  margin-top: 5px;
 }
 
 .fx-dot {
   display: inline-block;
-  width: 10px;
-  height: 10px;
+  width: 8px;
+  height: 8px;
+  flex: 0 0 auto;
   border-radius: 50%;
-  margin-right: 8px;
-  vertical-align: baseline;
-  border: 2px solid rgba(255, 255, 255, .9);
+  margin-right: 7px;
 }
 
-/* ---------- Page body ---------- */
+/* Evidence cards: one spacing scale across every tab and breakpoint. */
 .fx-page {
+  width: 100%;
   max-width: 1280px !important;
   margin: 0 auto !important;
-  padding: 20px 24px 40px !important;
-  gap: 16px !important;
+  padding: 26px 32px 40px !important;
+  gap: 20px !important;
+  box-sizing: border-box;
 }
 
 .fx-row {
-  gap: 16px !important;
+  gap: 20px !important;
   align-items: stretch !important;
   flex-wrap: wrap !important;
 }
 
 .fx-row>* {
-  min-width: 340px !important;
+  min-width: min(100%, 300px) !important;
 }
 
 .fx-card {
   background: var(--card-bg) !important;
-  border: 0 !important;
-  border-radius: 12px !important;
-  box-shadow: 0 2px 10px rgba(31, 84, 152, .08) !important;
-  padding: 20px !important;
-  gap: 12px !important;
+  border: 1px solid #DCE5EF !important;
+  border-radius: 16px !important;
+  box-shadow: 0 3px 14px #142D5006 !important;
+  padding: 24px !important;
+  gap: 16px !important;
+  min-width: 0;
 }
 
-.fx-card>.block,
 .fx-card .block {
   background: transparent !important;
   border: 0 !important;
   box-shadow: none !important;
+}
+
+.fx-card>.block {
   padding: 0 !important;
+}
+
+.fx-card [data-testid="plotly"] {
+  width: 100%;
+  min-width: 0;
 }
 
 .fx-card .form {
   background: transparent !important;
   border: 0 !important;
   box-shadow: none !important;
+  gap: 16px !important;
 }
 
 .fx-title {
-  font-size: 15px;
-  font-weight: 600;
   color: var(--primary-dark);
-  margin: 0 0 2px;
+  font-size: 16px;
+  font-weight: 650;
+  line-height: 1.4;
+  margin-bottom: 5px;
 }
 
-.fx-sub {
-  font-size: 12px;
+.fx-sub,
+.fx-caption {
   color: var(--text-muted);
-  margin: 0 0 4px;
+  font-size: 12.5px;
+  line-height: 1.65;
 }
 
 .fx-caption {
-  font-size: 12.5px;
-  color: var(--text-muted);
-  line-height: 1.5;
-  margin-top: 4px;
+  margin-top: 6px;
 }
 
 .fx-caption b {
   color: var(--text);
-  font-weight: 600;
 }
 
-/* ---------- Tabs ---------- */
-.fx-tabs>.tab-wrapper,
-.fx-tabs>div:first-child {
+.fx-tabs>.tab-wrapper {
   border-bottom: 1px solid var(--track);
+  gap: 6px;
 }
 
 .fx-tabs button[role="tab"] {
   font-family: var(--font);
-  font-size: 14px;
-  font-weight: 500;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 13px 18px;
   color: var(--text-muted);
-  padding: 10px 16px;
   border: 0;
   background: transparent;
 }
 
 .fx-tabs button[role="tab"][aria-selected="true"] {
-  color: var(--primary-dark);
-  font-weight: 600;
-  box-shadow: inset 0 -3px 0 var(--accent);
-}
-
-.fx-tabs button[role="tab"]:focus-visible {
-  outline: 2px solid var(--accent);
-  outline-offset: -2px;
+  color: var(--primary);
+  box-shadow: inset 0 -3px var(--primary);
 }
 
 .fx-tabs>.tabitem,
 .fx-tabs [role="tabpanel"] {
-  padding: 16px 0 0 !important;
+  padding: 22px 0 0 !important;
   border: 0 !important;
   background: transparent !important;
 }
 
-/* ---------- Light-blue stats panel (inside cards) ---------- */
+.fx-tabs [role="tabpanel"]>.column,
+.fx-tabs .tabitem>.column {
+  gap: 20px !important;
+}
+
 .fx-panel {
   background: var(--panel-bg);
+  border: 1px solid #E4EAF2;
   border-radius: 10px;
-  padding: 14px 16px;
+  padding: 16px;
+}
+
+.fx-bigcap {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--primary-dark);
+  margin-bottom: 10px;
 }
 
 .fx-stat {
   display: flex;
   justify-content: space-between;
   align-items: baseline;
-  padding: 7px 0;
-  border-bottom: 1px solid rgba(31, 84, 152, .08);
-  font-size: 13px;
+  gap: 16px;
+  padding: 9px 0;
+  border-bottom: 1px solid #DDE5EF;
+  font-size: 12.5px;
+  line-height: 1.5;
 }
 
 .fx-stat:last-child {
@@ -282,6 +363,7 @@ footer,
 
 .fx-stat .v {
   font-weight: 600;
+  text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
@@ -290,30 +372,28 @@ footer,
 }
 
 .fx-stat .v.neg {
-  color: #0A8F95;
+  color: var(--human);
 }
 
-.fx-big {
-  font-size: 28px;
-  font-weight: 700;
-  color: var(--primary-dark);
-  line-height: 1.1;
-  font-variant-numeric: tabular-nums;
+.fx-gauge-meta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
 }
 
-.fx-bigcap {
-  font-size: 12px;
-  color: var(--text-muted);
-  margin-bottom: 8px;
-}
-
-/* ---------- Badges, pills, chips ---------- */
-.fx-badge {
+.fx-badge,
+.fx-pill,
+.fx-chip {
   display: inline-block;
   font-size: 11.5px;
   font-weight: 600;
-  padding: 3px 10px;
+  line-height: 1.5;
   border-radius: 6px;
+  padding: 4px 9px;
+}
+
+.fx-badge {
   color: #fff;
 }
 
@@ -322,8 +402,8 @@ footer,
 }
 
 .fx-badge.fair {
-  background: var(--fair);
-  color: #3b2f05;
+  background: #F8E7B6;
+  color: #71500C;
 }
 
 .fx-badge.poor {
@@ -336,30 +416,21 @@ footer,
 
 .fx-badge.teal {
   background: var(--accent);
-  color: #05383a;
 }
 
 .fx-badge.slate {
-  background: var(--muted-series);
-  color: #243044;
-}
-
-.fx-pill {
-  display: inline-block;
-  font-size: 11.5px;
-  font-weight: 600;
-  padding: 2px 9px;
-  border-radius: 999px;
+  background: #E7EDF4;
+  color: #354C69;
 }
 
 .fx-pill.machine {
-  background: rgba(229, 83, 61, .12);
-  color: #B8321E;
+  background: #FBECE8;
+  color: #9D3525;
 }
 
 .fx-pill.human {
-  background: rgba(12, 185, 192, .14);
-  color: #077C81;
+  background: #E3F3F3;
+  color: #086872;
 }
 
 .fx-pill.neutral {
@@ -368,14 +439,11 @@ footer,
 }
 
 .fx-chip {
-  display: inline-block;
-  font-size: 12px;
-  padding: 3px 10px;
-  border-radius: 6px;
   background: var(--panel-bg);
   color: var(--primary-dark);
+  border: 1px solid var(--track);
   margin: 0 6px 6px 0;
-  border: 1px solid rgba(31, 84, 152, .15);
+  font-weight: 500;
 }
 
 .fx-groupchip {
@@ -393,21 +461,19 @@ footer,
   display: inline-block;
 }
 
-.fx-gauge-meta {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 8px;
+.fx-warn,
+.fx-ok,
+.fx-notice {
+  border-radius: 8px;
+  padding: 10px 12px;
+  margin-top: 8px;
+  font-size: 12.5px;
+  line-height: 1.6;
 }
 
 .fx-warn {
-  font-size: 12.5px;
-  color: #8A5A00;
-  background: #FFF6DD;
-  border-radius: 8px;
-  padding: 6px 10px;
-  margin-top: 6px;
-  line-height: 1.45;
+  color: #78520B;
+  background: #FFF5DB;
 }
 
 .fx-warn:before {
@@ -416,20 +482,8 @@ footer,
 }
 
 .fx-ok {
-  font-size: 12.5px;
-  color: #17794A;
-  background: #E5F6EC;
-  border-radius: 8px;
-  padding: 6px 10px;
-  margin-top: 6px;
-}
-
-/* ---------- Notices and empty state ---------- */
-.fx-notice {
-  border-radius: 10px;
-  padding: 12px 16px;
-  font-size: 13.5px;
-  line-height: 1.5;
+  color: #17643D;
+  background: #EAF6EF;
 }
 
 .fx-notice.error {
@@ -439,40 +493,52 @@ footer,
 }
 
 .fx-notice.info {
-  background: var(--panel-bg);
+  background: #EAF0FA;
   color: var(--primary-dark);
-  border: 1px solid rgba(31, 84, 152, .15);
+  border: 1px solid #D6E1F4;
 }
 
 .fx-notice:empty {
   display: none;
 }
 
-/* ---------- Indicator table ---------- */
+/* These bars encode signed attribution data; they are not loading progress bars. */
+.fx-tablewrap {
+  overflow-x: auto;
+}
+
 .fx-table {
   width: 100%;
   border-collapse: collapse;
-  font-size: 13px;
+  font-size: 12.5px;
+}
+
+.fx-table,
+.fx-table th,
+.fx-table td,
+.fx-table tr {
+  background: transparent !important;
+  border: 0 !important;
 }
 
 .fx-table th {
   text-align: left;
-  font-weight: 600;
+  font-size: 11px;
   color: var(--text-muted);
-  font-size: 12px;
-  padding: 8px 10px;
-  border-bottom: 2px solid var(--track);
+  font-weight: 600;
+  border-bottom: 2px solid var(--track) !important;
+  padding: 10px !important;
   white-space: nowrap;
 }
 
 .fx-table td {
-  padding: 10px;
-  border-bottom: 1px solid var(--track);
+  padding: 13px 10px !important;
+  border-bottom: 1px solid var(--track) !important;
   vertical-align: middle;
 }
 
 .fx-table tr:last-child td {
-  border-bottom: 0;
+  border-bottom: 0 !important;
 }
 
 .fx-table .feat {
@@ -481,25 +547,25 @@ footer,
 
 .fx-table .desc {
   display: block;
-  font-weight: 400;
-  font-size: 12px;
   color: var(--text-muted);
-  margin-top: 2px;
+  font-size: 11.5px;
+  line-height: 1.5;
+  margin-top: 3px;
   max-width: 46ch;
 }
 
 .fx-table .num {
-  font-variant-numeric: tabular-nums;
   text-align: right;
   white-space: nowrap;
+  font-variant-numeric: tabular-nums;
 }
 
 .fx-bar {
   position: relative;
-  height: 10px;
+  height: 8px;
   background: var(--track);
-  border-radius: 6px;
-  min-width: 140px;
+  border-radius: 4px;
+  min-width: 120px;
 }
 
 .fx-bar:after {
@@ -516,7 +582,7 @@ footer,
   position: absolute;
   top: 0;
   bottom: 0;
-  border-radius: 6px;
+  border-radius: 4px;
 }
 
 .fx-bar span.machine {
@@ -529,163 +595,6 @@ footer,
   background: var(--human);
 }
 
-.fx-tablewrap {
-  overflow-x: auto;
-}
-
-/* ---------- Inputs ---------- */
-.fx-card textarea {
-  font-family: var(--font) !important;
-  font-size: 14px !important;
-  line-height: 1.55 !important;
-}
-
-.fx-card label span {
-  font-weight: 500;
-}
-
-button.primary {
-  font-weight: 600 !important;
-}
-
-.fx-card .gr-button,
-.fx-card button {
-  border-radius: 10px !important;
-}
-
-/* ---------- Method tab prose ---------- */
-.fx-prose {
-  font-size: 14px;
-  line-height: 1.65;
-  max-width: 78ch;
-}
-
-.fx-prose h3 {
-  color: var(--primary-dark);
-  margin: 18px 0 6px;
-  font-size: 16px;
-}
-
-.fx-prose code {
-  background: var(--panel-bg);
-  padding: 1px 5px;
-  border-radius: 4px;
-}
-
-.fx-footer {
-  text-align: center;
-  color: var(--text-muted);
-  font-size: 12px;
-  padding: 8px 24px 28px;
-  max-width: 90ch;
-  margin: 0 auto;
-}
-
-@media (max-width: 640px) {
-  .fx-header nav {
-    display: none;
-  }
-
-  .fx-logo small {
-    display: none;
-  }
-
-  .fx-inner {
-    padding: 0 16px;
-  }
-
-  .fx-page {
-    padding: 16px 12px 32px !important;
-  }
-
-  .fx-row>* {
-    min-width: 100% !important;
-  }
-
-  .fx-kpi .val {
-    font-size: 22px;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  * {
-    transition: none !important;
-    animation: none !important;
-  }
-}
-
-/* ---------- Full-bleed blue areas (override Gradio block chrome) ---------- */
-.fx-bleed,
-.fx-bleed.block {
-  padding: 0 !important;
-  margin: 0 !important;
-  border: 0 !important;
-  border-radius: 0 !important;
-  background: transparent !important;
-  box-shadow: none !important;
-  min-height: 0 !important;
-  width: 100% !important;
-  max-width: none !important;
-}
-
-.fx-bleed .prose,
-.fx-bleed>div {
-  max-width: none !important;
-  padding: 0 !important;
-  margin: 0 !important;
-}
-
-.fx-header,
-.fx-header *,
-.fx-hero,
-.fx-hero h1,
-.fx-hero p,
-.fx-hero .fx-kpi,
-.fx-hero .fx-kpi * {
-  color: #fff !important;
-}
-
-.fx-hero p {
-  opacity: .8;
-}
-
-.fx-kpi .lab,
-.fx-kpi .sub {
-  opacity: .78;
-}
-
-.fx-hero h1 {
-  border: 0 !important;
-  margin: 4px 0 2px !important;
-}
-
-.fx-page>.block:first-child {
-  padding: 0 !important;
-}
-
-/* ---------- Tables: neutralize Gradio prose table styling ---------- */
-.fx-table,
-.fx-table th,
-.fx-table td,
-.fx-table tr {
-  border: 0 !important;
-  background: transparent !important;
-}
-
-.fx-table th {
-  border-bottom: 2px solid var(--track) !important;
-  padding: 8px 10px !important;
-}
-
-.fx-table td {
-  border-bottom: 1px solid var(--track) !important;
-  padding: 10px !important;
-}
-
-.fx-table tr:last-child td {
-  border-bottom: 0 !important;
-}
-
 .fx-card table,
 .fx-card table * {
   font-family: var(--font) !important;
@@ -695,40 +604,151 @@ button.primary {
   border-radius: 10px;
 }
 
-.fx-card thead th {
-  white-space: nowrap;
+.fx-card textarea {
+  font-family: var(--font) !important;
+  font-size: 14px !important;
+  line-height: 1.7 !important;
+  background: #FBFCFE !important;
 }
 
-/* Root column: no gap between the header, the hero strip and the page body */
-.gradio-container main.contain>.column {
-  gap: 0 !important;
+.fx-card button {
+  border-radius: 9px !important;
 }
 
-.fx-hero {
-  margin-top: -2px;
-  padding-top: 14px;
+button.primary {
+  font-weight: 600 !important;
+  min-height: 46px;
 }
 
-.fx-card,
-.fx-card * {
-  --font-mono: Inter, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+.fx-prose {
+  font-size: 14px;
+  line-height: 1.8;
+  max-width: 90ch;
 }
 
-.fx-bleed:has(.fx-header),
-.fx-bleed:has(.fx-hero) {
-  background: var(--primary) !important;
+.fx-prose h3 {
+  color: var(--primary-dark);
+  margin: 24px 0 10px;
+  font-size: 17px;
 }
 
-.fx-hero {
-  margin-top: 0;
+.fx-prose code {
+  background: var(--panel-bg);
+  padding: 2px 5px;
+  border-radius: 4px;
+}
+
+.fx-footer {
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 11.5px;
+  line-height: 1.7;
+  padding: 6px 24px 30px;
+  max-width: 110ch;
+  margin: 0 auto;
+}
+
+@media (max-width: 960px) {
+  .fx-kpis {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .fx-logo small {
+    max-width: 32ch;
+  }
 }
 
 @media (max-width: 640px) {
+  .fx-inner {
+    padding: 0 18px;
+  }
+
+  .fx-header .fx-inner {
+    min-height: 76px;
+    gap: 8px;
+    flex-wrap: wrap;
+    padding-top: 12px;
+    padding-bottom: 12px;
+  }
+
+  .fx-brand {
+    gap: 8px;
+  }
+
+  .fx-logo {
+    font-size: 19px;
+  }
+
+  .fx-logo small {
+    display: none;
+  }
+
+  .fx-logomark {
+    width: 34px;
+    height: 38px;
+    font-size: 21px;
+  }
+
+  .fx-header nav {
+    gap: 6px;
+    font-size: 10px;
+  }
+
+  .fx-header nav a {
+    padding: 7px;
+  }
+
+  .fx-hero {
+    padding: 26px 0 22px;
+  }
+
   .fx-kpis {
-    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
   }
 
   .fx-kpi {
-    padding: 12px 14px;
+    padding: 13px;
+    min-height: 110px;
+  }
+
+  .fx-kpi .val {
+    font-size: 25px;
+  }
+
+  .fx-kpi .val.small {
+    font-size: 14px;
+  }
+
+  .fx-page {
+    padding: 18px 12px 28px !important;
+  }
+
+  .fx-card {
+    padding: 18px !important;
+    border-radius: 12px !important;
+  }
+
+  .fx-row>* {
+    min-width: 100% !important;
+  }
+
+  .fx-tabs button[role="tab"] {
+    padding: 11px 9px;
+    font-size: 11px;
+  }
+
+  .fx-stat {
+    flex-wrap: wrap;
+    gap: 4px 12px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+  .gradio-container *,
+  .gradio-container *:before,
+  .gradio-container *:after {
+    transition: none !important;
+    animation: none !important;
   }
 }

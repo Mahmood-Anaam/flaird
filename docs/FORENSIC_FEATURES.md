@@ -1,124 +1,148 @@
-# Forensic-Linguistic Features
+# Forensic-linguistic feature specification
 
-FLAIRD's forensic stream consists of **35 deterministic features** computed by `flaird.modeling.features.ForensicFeatureExtractor`. They are fixed, ordered, human-readable measurements of how a text is written. This document defines them, explains why each group is relevant to machine-text detection, and describes the numerical conventions.
+## 1. Purpose and implementation contract
 
----
+[ForensicFeatureExtractor](../src/flaird/modeling/features.py) returns 35 ordered floating-point values. These are observable stylistic measurements, not independent tests of human authorship. The classifier learns their joint relevance. A high or low value has no universal machine/human direction; an Owen attribution describes its effect for one checkpoint, document and reference input.
 
-## 1. Design principles
+The seven groups in `DEFAULT_FEATURE_GROUPS` are the learned feature tokens and the explanation coalitions. Feature order must remain compatible with a checkpoint. Reordering values while retaining the same dimensions silently changes their meaning.
 
-1. **Interpretable by construction.** Every feature has a plain-language meaning, so an analyst can reason about the evidence.
-2. **Deterministic.** The same text always gives the same vector; no learned component is involved.
-3. **Content-light.** Features describe style, vocabulary distribution and structure rather than topics.
-4. **Computed on the whole preprocessed text.** The feature vector uses the complete text after placeholder substitution, whereas the neural encoder reads at most 512 tokens.
-5. **Robust failure mode.** Some library routines reject extremely short inputs; in that case the affected values become `0.0`, and non-finite values are replaced by `0.0`. The explanation module flags the all-zero vector as an unreliable input.
+The tables below distinguish library definitions from direct FLAIRD calculations. Library formulas were checked against **pystylometry 1.4.3**. The package specification allows `>=1.4.3,<2`; the dataset notebook installs an unpinned version. Therefore exact historical dependency provenance is not recoverable from that notebook alone. Reproduction should record the resolved version and compare stored vectors before regenerating them.
 
-## 2. Notation
+## 2. Notation and tokenization
 
-For a text, let `N` be the number of word tokens (lower-cased, matched by `\b[\w'-]+\b`), `V` the number of distinct words (types), `V_i` the number of words that occur exactly `i` times, `M_2 = Σ_i i² V_i`, and `CV(a) = std(a) / mean(a)` the coefficient of variation (0 for an empty list or zero mean). Sentences are split at `[.!?]+`; paragraphs at blank lines.
+For a token sequence, $N$ denotes tokens, $V$ distinct types, $V_r$ types occurring exactly $r$ times, and $M_2=\sum_r r^2V_r$. For a list $a$:
 
-Library-computed measures (`pystylometry`, version ≥ 1.4.3) are marked ⚙; features computed directly in FLAIRD are marked ✎. Library measures follow the standard definitions of the stylometry literature; where a numerical convention matters, the library implementation is authoritative.
+$$
+\operatorname{CV}(a)=\frac{\operatorname{std}_{\mathrm{population}}(a)}{\operatorname{mean}(a)}.
+$$
 
-## 3. The 35 features by group
+FLAIRD uses zero when a list is empty or its mean is zero. Its direct word counts use lowercased matches of `\b[\w'-]+\b`; sentence segments use nonempty pieces after `[.!?]+`; paragraphs use nonempty pieces after `\n\s*\n`. CV sentence/paragraph lengths use whitespace splitting **inside** those segments. These conventions differ from the library's tokenizers and character-level sentence handling. Do not reuse a single $N$ across incompatible implementations when checking an example.
 
-The groups are the 7 *feature tokens* of the model (`DEFAULT_FEATURE_GROUPS`). Within each group, the position in the 35-dimensional vector is shown.
+**Library chunking matters.** TTR's main values are global in 1.4.3. MTLD, Yule, hapax, character metrics, and entropy expose summaries over the library's default 1,000-word chunks. Many selected fields are means of chunk measurements, rather than the formula applied once to all tokens. The formulas below define the underlying measurement; the returned library attribute defines aggregation. Every part of the input is available to extraction, but this does not imply a single global statistic for each field.
 
-### 3.1 Lexical diversity (10 features, indices 0–9)
+## 3. Lexical diversity: indices 0–9
 
-Question answered: *how rich and varied is the vocabulary?* Language models tend to produce fluent but statistically regular vocabularies; humans show more idiosyncratic vocabulary and more rare words.
+The purpose is to represent vocabulary variety and concentration with complementary length sensitivities. A repetitive technical document and a repetitive generated document can have similar values; domain and length are confounders.
 
-| # | Feature | Source | Definition and meaning |
-|--:|---------|:------:|------------------------|
-| 0 | `ttr` | ⚙ | Type-token ratio `V / N`. |
-| 1 | `root_ttr` | ⚙ | Root TTR `V / √N` (corrects the length dependence of TTR). |
-| 2 | `log_ttr` | ⚙ | Log TTR `log V / log N` (another length correction). |
-| 3 | `mtld` | ⚙ | Measure of Textual Lexical Diversity (average of forward and backward passes): mean length of word runs that keep a running TTR above a threshold. Robust to text length. |
-| 4 | `yule_k` | ⚙ | Yule's K `10⁴ (M_2 − N) / N²`; larger values mean a more repetitive vocabulary. |
-| 5 | `yule_i` | ⚙ | Yule's I, the inverse-type measure of vocabulary richness (larger means richer). |
-| 6 | `hapax_ratio` | ⚙ | Proportion of hapax legomena (words occurring once). |
-| 7 | `dis_hapax_ratio` | ⚙ | Proportion of dis legomena (words occurring twice). |
-| 8 | `sichel_s` | ⚙ | Sichel's S, based on `V_2 / V`. |
-| 9 | `honore_r` | ⚙ | Honoré's R `100 log N / (1 − V_1 / V)`; high values mean many once-used words. |
+| Index | Feature / library attribute | Definition | Illustrative interpretation |
+|---:|---|---|---|
+| 0 | `ttr` / `ttr` | $V/N$ | Five distinct types in ten tokens yield 0.5. Longer documents often have smaller TTR even for the same writer. |
+| 1 | `root_ttr` / `root_ttr` | $V/\sqrt{N}$ | For $N=100,V=40$, value 4. It reduces, but does not eliminate, length dependence. |
+| 2 | `log_ttr` / `log_ttr` | $\log V/\log N$; 0 for $N\leq1$ | The same example gives approximately 0.801. Also called Herdan's C. |
+| 3 | `mtld` / `mtld_average` | Average forward/backward MTLD; default TTR threshold 0.72 | Longer segments before diversity falls below the threshold suggest sustained lexical variety. It is not a readability score. |
+| 4 | `yule_k` / `yule_k` | $10^4(M_2-N)/N^2$ | Higher concentration of repeated types raises K. |
+| 5 | `yule_i` / `yule_i` | $V^2/(M_2-N)$ | In this library, larger values indicate less concentrated vocabulary. Undefined values become zero downstream; I is not simply $1/K$. |
+| 6 | `hapax_ratio` / `hapax_ratio` | $V_1/N$ | Types used once divided by token count, **not** vocabulary size. |
+| 7 | `dis_hapax_ratio` / `dis_hapax_ratio` | $V_2/N$ | Types used twice divided by tokens; their occurrences are not counted twice in the numerator. |
+| 8 | `sichel_s` / `sichel_s` | $V_2/V$ | Vocabulary share represented by twice-used types. This has a different denominator from feature 7. |
+| 9 | `honore_r` / `honore_r` | $100\log N/(1-V_1/V)$ | Many once-used types increase R. An infinite result is converted to zero, so zero may indicate an undefined case. |
 
-### 3.2 Function-word style (7 features, indices 10–16)
+For `cat cat dog bird bird`, $N=5,V=3,V_1=1,V_2=2,M_2=9$. In one chunk, TTR is 0.6, hapax ratio 0.2, dis-hapax ratio 0.4, Sichel's S $2/3$, Yule's K 1600, and Yule's I 2.25. This demonstrates why repeated types and repeated occurrences must not be confused.
 
-Question answered: *what are the writer's habits with grammatical "glue" words?* Function words are used largely unconsciously and are a classical authorship signal; models reproduce their distribution well on average but not in their natural variability.
+## 4. Function-word style: indices 10–16
 
-| # | Feature | Source | Definition and meaning |
-|--:|---------|:------:|------------------------|
-| 10 | `determiner_ratio` | ⚙ | Share of determiners (the, a, this, …). |
-| 11 | `preposition_ratio` | ⚙ | Share of prepositions. |
-| 12 | `conjunction_ratio` | ⚙ | Share of conjunctions. |
-| 13 | `pronoun_ratio` | ⚙ | Share of pronouns. |
-| 14 | `auxiliary_ratio` | ⚙ | Share of auxiliary verbs. |
-| 15 | `function_word_ratio` | ⚙ | Total share of function words. |
-| 16 | `function_word_diversity` | ⚙ | Variety of distinct function words used. |
+The purpose is to capture habits in grammatical connecting words with fixed English lexicons. These are dictionary-based counts, **not contextual POS tags** or a syntactic parser. A word can occur in multiple category lists. The total union counts each matching token once, so category ratios need not sum to the total ratio.
 
-### 3.3 Surface composition (5 features, indices 17, 21–24)
+| Index | Feature | Definition | Example and analytical purpose |
+|---:|---|---|---|
+| 10 | `determiner_ratio` | Determiner matches / library word count | “the”, “a”, “this”: article and reference habits. |
+| 11 | `preposition_ratio` | Preposition matches / words | “in”, “of”, “on”: relational phrase frequency. |
+| 12 | `conjunction_ratio` | Conjunction matches / words | “and”, “but”, “or”: explicit linking of clauses or items. |
+| 13 | `pronoun_ratio` | Pronoun matches / words | “I”, “they”, “it”: personal versus impersonal reference patterns. |
+| 14 | `auxiliary_ratio` | Auxiliary matches / words | “is”, “have”, “will”: surface tense/modal habits; ambiguous words are not disambiguated. |
+| 15 | `function_word_ratio` | `total_function_word_ratio`: union matches / words | Includes library categories such as particles beyond the five separately exposed ratios. |
+| 16 | `function_word_diversity` | Distinct matching function words / all matching function-word tokens | If six function-word tokens contain three types, diversity is 0.5. It measures within-function-word variety, not share of total vocabulary. |
 
-Question answered: *what does the text look like at the character level?* Encoding artifacts, formatting habits and adversarial character manipulations show up here.
+For a category with two matches in ten library word tokens, its ratio is 0.2. Replacing two “and” occurrences by “but” changes diversity and potentially rhetorical style without necessarily changing the conjunction ratio. This motivates using both counts and diversity.
 
-| # | Feature | Source | Definition and meaning |
-|--:|---------|:------:|------------------------|
-| 17 | `avg_word_length` | ⚙ | Mean word length in characters. |
-| 21 | `vowel_consonant_ratio` | ⚙ | Vowels divided by consonants. |
-| 22 | `digit_ratio` | ⚙ | Share of digit characters. |
-| 23 | `uppercase_ratio` | ⚙ | Share of uppercase characters. |
-| 24 | `whitespace_ratio` | ⚙ | Share of whitespace characters (also sensitive to whitespace attacks). |
+## 5. Surface composition: indices 17, 21–24
 
-### 3.4 Structural organization (4 features, indices 18, 27, 28, 34)
+These features encode orthography and formatting. Their relevance can arise from writing convention, preprocessing artifacts or adversarial manipulation rather than generation itself.
 
-Question answered: *how is the text organized into sentences and paragraphs?* Human writing tends to vary sentence length more ("burstiness"); generated text is often more regular.
+| Index | Feature | Definition in pystylometry 1.4.3 | Example / caveat |
+|---:|---|---|---|
+| 17 | `avg_word_length` | Mean alphanumeric character count of whitespace-delimited words containing alphanumeric characters | “cat, dogs” gives lengths 3 and 4, mean 3.5; comma is excluded. |
+| 21 | `vowel_consonant_ratio` | English vowel count / English consonant count | “cat” gives $1/2$; absent consonants may yield nonfinite values, subsequently zeroed. |
+| 22 | `digit_ratio` | Digits / total characters | “a1 b” has one digit in four characters, 0.25, before chunk handling. Phone-like strings may already be replaced. |
+| 23 | `uppercase_ratio` | Uppercase alphabetic count / counted English letters | “Ab” gives 0.5. The denominator is letters, **not all characters**. Non-English input can violate intuitive ratio bounds. |
+| 24 | `whitespace_ratio` | Whitespace / total characters in library chunks | Two spaces in a ten-character chunk give 0.2. Library chunk reconstruction can alter original whitespace; this is not a lossless whitespace audit. |
 
-| # | Feature | Source | Definition and meaning |
-|--:|---------|:------:|------------------------|
-| 18 | `avg_sentence_length_chars` | ⚙ | Mean sentence length in characters. |
-| 27 | `sentence_length_cv` | ✎ | `CV` of sentence lengths measured in words. |
-| 28 | `paragraph_length_cv` | ✎ | `CV` of paragraph lengths in words. |
-| 34 | `newline_density` | ✎ | Line breaks per word: `count("\n") / max(1, N)`. |
+## 6. Structural organization: indices 18, 27, 28, 34
 
-### 3.5 Punctuation and rhetoric (5 features, indices 19, 20, 31–33)
+The purpose is to summarize variation in document structure without requiring a parser. Uniform or variable length is a descriptive observation, not an authorship rule.
 
-Question answered: *how does the writer punctuate and address the reader?*
+| Index | Feature | Definition | Worked interpretation |
+|---:|---|---|---|
+| 18 | `avg_sentence_length_chars` | Library mean sentence length in characters, including its delimiter handling, aggregated over chunks | Longer clauses can increase it, but abbreviations and repeated punctuation affect segmentation. |
+| 27 | `sentence_length_cv` | Population CV of whitespace-word counts in FLAIRD sentence segments | Sentence lengths 2 and 6 yield mean 4, standard deviation 2, CV 0.5. |
+| 28 | `paragraph_length_cv` | Population CV of whitespace-word counts in blank-line-separated paragraphs | One paragraph gives zero variation regardless of its length. |
+| 34 | `newline_density` | `text.count("\n") / max(1,N)` using direct regex words | Two newline characters and ten words yield 0.2; a blank line typically contributes two characters. |
 
-| # | Feature | Source | Definition and meaning |
-|--:|---------|:------:|------------------------|
-| 19 | `punctuation_density` | ⚙ | Punctuation characters per character. |
-| 20 | `punctuation_variety` | ⚙ | Number of distinct punctuation marks used. |
-| 31 | `question_density` | ✎ | Question marks per sentence: `count("?") / max(1, #sentences)`. |
-| 32 | `exclamation_density` | ✎ | Exclamation marks per sentence. |
-| 33 | `quote_density` | ✎ | Quotation marks (`"`, `“`, `”`) per word. |
+Repeated punctuation such as `?!` is split as a run by FLAIRD's sentence regex. The library character routine can use a different segmentation, so features 18 and 27 intentionally do not share a denominator. Neither measures grammatical tree depth or discourse coherence.
 
-### 3.6 Information entropy (2 features, indices 25, 26)
+## 7. Punctuation and rhetoric: indices 19, 20, 31–33
 
-Question answered: *how predictable are character and word sequences?* Text sampled from a language model is, by construction, high-probability under a language model; bigram entropy provides a cheap proxy for local predictability.
+These indicators capture rhetorical presentation and formatting intensity. Quotes, questions and exclamations can be topic- or genre-dependent.
 
-| # | Feature | Source | Definition and meaning |
-|--:|---------|:------:|------------------------|
-| 25 | `character_bigram_entropy` | ⚙ | Shannon entropy of the character-bigram distribution. |
-| 26 | `word_bigram_entropy` | ⚙ | Shannon entropy of the word-bigram distribution. |
+| Index | Feature | Definition | Example / caveat |
+|---:|---|---|---|
+| 19 | `punctuation_density` | Library punctuation count / whitespace word count × 100, summarized over chunks | Two recognized punctuation marks in four words yield **50**, not a character fraction. |
+| 20 | `punctuation_variety` | Distinct recognized punctuation types, summarized over chunks | A period, comma and question mark produce variety 3 in one chunk. It is not normalized to text length. |
+| 31 | `question_density` | Number of `?` / `max(1, sentence segments)` | “Why?? Yes.” has two marks and two segments: 1. Multiple marks can make the ratio exceed one. |
+| 32 | `exclamation_density` | Number of `!` / `max(1, sentence segments)` | “Stop!!!” gives 3 for one segment. |
+| 33 | `quote_density` | Count of `"`, `“`, `”` / `max(1,N)` | One opening and one closing quote contribute two. Single apostrophes are not counted. |
 
-### 3.7 Repetition and burstiness (2 features, indices 29, 30)
+The original description of punctuation density as punctuation per character was incorrect for the checked library version. This release corrects the documentation and display description while preserving the extractor and trained feature semantics.
 
-Question answered: *how are repeated words and phrases distributed?* Human text clusters topical words in bursts; generated text repeats phrases more uniformly (or avoids repetition more aggressively).
+## 8. Information entropy: indices 25–26
 
-| # | Feature | Source | Definition and meaning |
-|--:|---------|:------:|------------------------|
-| 29 | `word_burstiness` | ✎ | `CV` of the word-frequency counts (unevenness of the frequency distribution). |
-| 30 | `repeated_bigram_ratio` | ✎ | Distinct word bigrams that occur more than once, divided by the number of distinct bigrams. |
+For empirical bigram frequencies $p_b$, the underlying statistic is Shannon entropy in bits:
 
-## 4. Numerical conventions inside the model
+$$
+H_2=-\sum_{b:p_b>0}p_b\log_2 p_b.
+$$
 
-* Raw values are fed to the model unnormalized; the `FeatureEncoder` applies `sign(x)·log(1 + |x|)` and one learned projection per group (see [ARCHITECTURE.md](ARCHITECTURE.md), §3.3).
-* A raw vector of zeros maps to zero after the logarithm, which is why it is used as the "no forensic information" baseline of the explanation module.
-* No normalization statistics (means, variances) are computed from the data, so the extractor and the model have no hidden dependency on the training corpus.
+| Index | Feature | Measurement | Example / limitation |
+|---:|---|---|---|
+| 25 | `character_bigram_entropy` | Mean library chunk entropy of overlapping character bigrams | If two bigram types occur equally often, entropy is 1 bit. Spaces and case can contribute under the library tokenizer/chunk rules. |
+| 26 | `word_bigram_entropy` | Mean library chunk entropy of overlapping word bigrams | Three distinct equally frequent pairs yield $\log_2 3\approx1.585$ bits. |
 
-## 5. Why not more (or learned) features?
+These are empirical distributions of pair **types**. They are not a pretrained language model's likelihood, conditional next-word entropy, perplexity score from ModernBERT, or a semantic coherence measure. High empirical entropy often follows from many unique bigrams and is strongly affected by length. The rationale is to expose local distributional regularity cheaply, not to replace probabilistic language modeling.
 
-The set was chosen to cover the classical stylometric families with a small, cheap, library-backed vector that is stable on texts of 100–1000 words. The `FeatureEncoder` is generic: a different list of features and group assignment can be supplied through the model configuration (`forensic_feature_dim`, `feature_group_names`, `feature_group_indices`), but a checkpoint is only valid for the feature definition it was trained with.
+## 9. Repetition and burstiness: indices 29–30
 
-## 6. Known limitations
+| Index | Feature | Direct calculation | Example / limitation |
+|---:|---|---|---|
+| 29 | `word_burstiness` | Population CV of counts of distinct regex word types | Frequencies `[3,1]` yield CV 0.5. It measures frequency inequality, not the temporal spacing of repeated words. Permuting tokens preserves it. |
+| 30 | `repeated_bigram_ratio` | Number of distinct word-pair types with count > 1 / `max(1, number of distinct pair types)` | “a b a b” has pair types `a b` (twice), `b a` (once): ratio $1/2$. This is not repeated occurrences / all occurrences. |
 
-* Feature values depend on text length for some measures (TTR); the length-corrected variants are included for this reason, but very short texts remain unreliable.
-* Sentence and paragraph splitting is rule-based and English-oriented.
-* Library routines that reject very short inputs produce zeros, which look identical to a genuinely degenerate text; the explanation module therefore reports this case explicitly.
-* The thesis proposal anticipates features for syntactic complexity, discourse coherence and readability. The released extractor does **not** contain such features (it has no parser-based or discourse-level measures); the 35 features cover lexical, function-word, character-level, structural, punctuation, entropy and repetition evidence only.
+The group targets repetition concentration and repeated local phrases. A text can have high word-frequency inequality and low pair repetition, hence both indicators are retained. The name “burstiness” should be interpreted according to the implemented frequency-CV definition.
+
+## 10. Extraction failure, scaling and explanation
+
+The library calls share one `try` block. If **any** of those calls raises `ValueError` or `ZeroDivisionError`, **all library-backed result objects** in that block become `None`; their attributes yield zero. Direct features (indices 27–34) are still calculated. `_finite` additionally maps invalid scalar conversions, NaN and infinity to zero. The implementation does not record a separate failure flag per feature, and exceptions outside these handled types propagate.
+
+Consequently, zero may mean a genuine absence, an undefined statistic, or a handled library failure. An all-zero vector is flagged by the explainer, but partial library failure can remain undetected. Very short texts warrant caution even when some direct features are nonzero.
+
+The model applies $\operatorname{sign}(x)\log(1+|x|)$, followed by learned group projections. There is no dataset-fitted standardization. See [architecture](ARCHITECTURE.md) for why this matters to attention. An attribution of +0.4 is a **machine-logit contribution relative to the masking baseline**, not “40% machine,” nor a threshold on the raw feature.
+
+```python
+from flaird.modeling.features import FEATURE_NAMES, ForensicFeatureExtractor
+
+extractor = ForensicFeatureExtractor()
+text = 'One small example. A second sentence repeats one word.'
+measurements = extractor.extract_dict(text)
+vector = extractor(text)
+assert len(vector) == 35
+assert list(measurements) == list(FEATURE_NAMES)
+```
+
+For training-aligned use, apply `preprocess_text` before extraction. The feature extractor itself intentionally does not perform that substitution. Features are computed over the complete supplied text; in the demo this is at most 30,000 characters, while the encoder independently sees at most 512 tokens.
+
+## 11. Research interpretation and reproducibility
+
+The feature families are motivated by stylometry, but the repository contains no isolated statistical validation that every feature is independently discriminative. Correlation is expected: lexical richness measures share vocabulary counts, and punctuation/structure measures overlap. Owen values respect predefined groups; they do not remove these statistical dependencies or turn masking into realistic text editing.
+
+There are no parser-based syntactic complexity, readability-index, discourse-relation, or semantic coherence features in this release. Such measures remain possible extensions requiring new datasets, checkpoint compatibility decisions and ablations. English lexicons and sentence heuristics do not establish multilingual validity.
+
+Primary implementation reference: Craig Trim, [pystylometry repository](https://github.com/craigtrim/pystylometry), especially `lexical/`, `character/character_metrics.py`, and `ngrams/entropy.py`. Version-specific package: [pystylometry 1.4.3](https://pypi.org/project/pystylometry/1.4.3/). Foundational definitions include Yule (1944), *The Statistical Study of Literary Vocabulary*, and Shannon (1948), *A Mathematical Theory of Communication*. These motivate measurements; FLAIRD's chosen library conventions govern its actual inputs.

@@ -90,10 +90,10 @@ def donut(
 
 
 def balance_donut(balance: PathBalance, height: int = 250) -> go.Figure:
-    """Semantic vs. forensic share of the final decision (semantic-anchored decomposition)."""
+    """Absolute baseline/delta magnitudes; these are not causal decision shares."""
     fig = go.Figure(
         go.Pie(
-            labels=["Semantic path", "Forensic path"],
+            labels=["Baseline logit magnitude", "Forensic change magnitude"],
             values=[balance.semantic_share, balance.forensic_share],
             hole=0.68,
             sort=False,
@@ -122,67 +122,93 @@ def balance_donut(balance: PathBalance, height: int = 250) -> go.Figure:
     return _base(fig, height)
 
 
-def generator_bars(generator: GeneratorAnalysis, height: int = 280) -> go.Figure:
-    """Probability of each generator class; the predicted class is highlighted."""
+def _group_label(name: str) -> str:
+    """Wrap long axis labels so evidence charts remain readable on a phone."""
+    return {
+        "Function-word style": "Function-word<br>style",
+        "Surface composition": "Surface<br>composition",
+        "Structural organization": "Structural<br>organization",
+        "Punctuation & rhetoric": "Punctuation<br>& rhetoric",
+        "Information entropy": "Information<br>entropy",
+        "Repetition & burstiness": "Repetition &<br>burstiness",
+    }.get(name, name)
+
+
+def generator_bars(generator: GeneratorAnalysis, height: int = 340) -> go.Figure:
+    """Horizontal family scores preserve legible labels at mobile widths."""
     items = sorted(generator.probs.items(), key=lambda kv: -kv[1])
     labels = [k for k, _ in items]
     values = [v * 100 for _, v in items]
     colors = [
-        T["primary"]
-        if k == generator.predicted
-        else T["accent"]
-        if k in generator.top3
-        else T["muted_series"]
+        (
+            T["primary"]
+            if k == generator.predicted
+            else T["accent"]
+            if k in generator.top3
+            else T["muted_series"]
+        )
         for k in labels
     ]
     fig = go.Figure(
         go.Bar(
-            x=labels,
-            y=values,
+            y=labels,
+            x=values,
+            orientation="h",
             marker=dict(color=colors, cornerradius=4),
             text=[f"{v:.0f}%" if v >= 1 else "" for v in values],
             textposition="outside",
             cliponaxis=False,
-            hovertemplate="%{x}: %{y:.1f}%<extra></extra>",
+            hovertemplate="%{y}: %{x:.1f}%<extra></extra>",
         )
     )
-    fig.update_yaxes(visible=False, range=[0, max(values) * 1.25 + 1])
-    fig.update_xaxes(tickangle=-35, showgrid=False, linecolor=T["track"])
-    return _base(fig, height, margin=(8, 24, 8, 8))
+    fig.update_yaxes(autorange="reversed", showgrid=False, tickfont=dict(size=11))
+    fig.update_xaxes(
+        title="Model score (%)",
+        range=[0, max(values) * 1.3 + 1],
+        gridcolor=T["track"],
+        ticksuffix="%",
+    )
+    return _base(fig, height, margin=(92, 8, 30, 48))
 
 
 def waterfall(
-    balance: PathBalance, groups: list[GroupAttribution], height: int = 380
+    balance: PathBalance, groups: list[GroupAttribution], height: int = 480
 ) -> go.Figure:
-    """Additive decomposition: semantic-only logit + group contributions = final logit."""
+    """Horizontal additive logit accounting with readable, wrapped group labels."""
     ordered = sorted(groups, key=lambda g: -abs(g.phi))
     names = (
-        ["Semantic path (neutral forensics)"]
-        + [g.display_name for g in ordered]
+        ["Baseline forensics"]
+        + [_group_label(g.display_name) for g in ordered]
         + ["Final logit"]
     )
-    measure = ["absolute"] + ["relative"] * len(ordered) + ["total"]
     values = [balance.semantic_logit] + [g.phi for g in ordered] + [balance.final_logit]
+    measure = ["absolute"] + ["relative"] * len(ordered) + ["total"]
     fig = go.Figure(
         go.Waterfall(
-            x=names,
-            y=values,
+            y=names,
+            x=values,
+            orientation="h",
             measure=measure,
-            text=[f"{v:+.2f}" for v in values],
-            textposition="outside",
-            cliponaxis=False,
             increasing=dict(marker=dict(color=T["machine"])),
             decreasing=dict(marker=dict(color=T["human"])),
             totals=dict(marker=dict(color=T["primary"])),
             connector=dict(line=dict(color=T["muted_series"], width=1)),
-            hovertemplate="%{x}<br>%{y:+.3f}<extra></extra>",
+            hovertemplate="%{y}<br>%{x:+.3f} logit<extra></extra>",
         )
     )
-    fig.update_xaxes(tickangle=-25, showgrid=False, linecolor=T["track"])
-    fig.update_yaxes(
-        title="Machine logit", gridcolor=T["track"], zerolinecolor=T["muted_series"]
+    positions = [0.0, balance.semantic_logit]
+    for group in ordered:
+        positions.append(positions[-1] + group.phi)
+    lower, upper = min(positions), max(positions)
+    padding = max(upper - lower, 0.1) * 0.15
+    fig.update_xaxes(
+        title="Machine logit",
+        gridcolor=T["track"],
+        zerolinecolor=T["muted_series"],
+        range=[lower - padding, upper + padding],
     )
-    return _base(fig, height, margin=(56, 24, 8, 8))
+    fig.update_yaxes(autorange="reversed", showgrid=False, tickfont=dict(size=11))
+    return _base(fig, height, margin=(132, 12, 16, 48))
 
 
 def _tint(hex_color: str, mix: float = 0.55) -> str:
@@ -247,15 +273,15 @@ def sunburst(
     return _base(fig, height)
 
 
-def attention_vs_causal(groups: list[GroupAttribution], height: int = 380) -> go.Figure:
-    """Fusion attention (what the model read) vs. share of absolute causal contribution."""
+def attention_vs_causal(groups: list[GroupAttribution], height: int = 420) -> go.Figure:
+    """Fusion routing weights versus absolute baseline-masking contributions."""
     if any(g.attention is None for g in groups):
         return empty_figure(
             "Fusion attention is available for attention-fusion models only.", height
         )
     total = sum(abs(g.phi) for g in groups) or 1.0
     ordered = sorted(groups, key=lambda g: abs(g.phi))
-    names = [g.display_name for g in ordered]
+    names = [_group_label(g.display_name) for g in ordered]
     fig = go.Figure()
     fig.add_bar(
         y=names,
@@ -277,11 +303,11 @@ def attention_vs_causal(groups: list[GroupAttribution], height: int = 380) -> go
         barmode="group",
         bargap=0.35,
         showlegend=True,
-        legend=dict(orientation="h", y=1.1, x=0),
+        legend=dict(orientation="h", y=1.25, x=0, yanchor="top", font=dict(size=10)),
     )
     fig.update_xaxes(title="Percent", gridcolor=T["track"], ticksuffix="%")
-    fig.update_yaxes(showgrid=False)
-    return _base(fig, height, margin=(150, 36, 8, 8)).update_layout(showlegend=True)
+    fig.update_yaxes(showgrid=False, tickfont=dict(size=11))
+    return _base(fig, height, margin=(132, 85, 16, 48)).update_layout(showlegend=True)
 
 
 def group_contributions(groups: list[GroupAttribution], height: int = 340) -> go.Figure:
@@ -289,16 +315,13 @@ def group_contributions(groups: list[GroupAttribution], height: int = 340) -> go
     ordered = sorted(groups, key=lambda g: abs(g.phi))
     fig = go.Figure(
         go.Bar(
-            y=[g.display_name for g in ordered],
+            y=[_group_label(g.display_name) for g in ordered],
             x=[g.phi for g in ordered],
             orientation="h",
             marker=dict(
                 color=[T["machine"] if g.phi > 0 else T["human"] for g in ordered],
                 cornerradius=3,
             ),
-            text=[f"{'▲' if g.phi > 0 else '▼'} {g.phi:+.3f}" for g in ordered],
-            textposition="outside",
-            cliponaxis=False,
             hovertemplate="%{y}<br>%{x:+.3f} logit<extra></extra>",
         )
     )
@@ -310,8 +333,8 @@ def group_contributions(groups: list[GroupAttribution], height: int = 340) -> go
         zerolinewidth=1.5,
         range=[-span * 1.35, span * 1.35],
     )
-    fig.update_yaxes(showgrid=False)
-    return _base(fig, height, margin=(150, 8, 24, 8))
+    fig.update_yaxes(showgrid=False, tickfont=dict(size=11))
+    return _base(fig, height, margin=(132, 8, 16, 48))
 
 
 def consistency_note(checks: ConsistencyChecks) -> str:
