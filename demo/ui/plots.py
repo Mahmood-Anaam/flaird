@@ -143,7 +143,9 @@ def generator_bars(generator: GeneratorAnalysis, height: int = 340) -> go.Figure
         (
             T["primary"]
             if k == generator.predicted
-            else T["accent"] if k in generator.top3 else T["muted_series"]
+            else T["accent"]
+            if k in generator.top3
+            else T["muted_series"]
         )
         for k in labels
     ]

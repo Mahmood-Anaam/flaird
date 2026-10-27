@@ -131,9 +131,7 @@ def balance_panel(balance: PathBalance) -> str:
     )
     return (
         '<div class="fx-panel"><div class="fx-bigcap">Semantic-anchored decomposition</div>'
-        + stat(
-            "Baseline-forensic logit", f"{balance.semantic_logit:+.2f}"
-        )
+        + stat("Baseline-forensic logit", f"{balance.semantic_logit:+.2f}")
         + stat(
             "Forensic contribution",
             f"{balance.forensic_delta:+.2f}",

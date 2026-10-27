@@ -10,8 +10,8 @@ from pathlib import Path
 from typing import Any
 
 import pandas as pd
-import spaces
 
+import spaces
 from flaird.utils.explain import ExplainConfig, FlairdExplainer, FlairdExplanation
 
 from . import components as ui

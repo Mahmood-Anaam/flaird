@@ -211,15 +211,18 @@ def build_app(controller: DashboardController | None = None) -> gr.Blocks:
         def run(text_value, model_label, precision_value):
             return controller.analyze(text_value, model_label, precision_value)
 
-        analyze.click(run, [text, model, precision], outputs, show_progress="hidden")
+        analyze.click(run, [text, model, precision], outputs, show_progress="minimal")
         example.change(
-            controller.load_example, example, [text, example_chip], show_progress="hidden"
+            controller.load_example,
+            example,
+            [text, example_chip],
+            show_progress="minimal",
         )
         clear.click(
             lambda: ("", None, "", *empty_view().as_tuple()),
             None,
             [text, example, example_chip, *outputs],
-            show_progress="hidden",
+            show_progress="minimal",
         )
     return app
 
