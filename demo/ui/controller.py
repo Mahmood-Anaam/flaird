@@ -10,8 +10,8 @@ from pathlib import Path
 from typing import Any
 
 import pandas as pd
-import spaces
 
+import spaces
 from flaird.utils.explain import ExplainConfig, FlairdExplainer, FlairdExplanation
 
 from . import components as ui
@@ -123,7 +123,7 @@ def empty_view(message: str = "", kind: str = "info") -> View:
         score_meta="",
         reliability_plot=plots.donut(0.0, TOKENS["good"], "—", "reliability"),
         reliability_meta="",
-        gate_plot=plots.donut(0.0, TOKENS["accent"], "—", "semantic reliance"),
+        gate_plot=plots.donut(0.0, TOKENS["accent"], "—", "mean fusion gate"),
         gate_meta="",
         waterfall_plot=plots.empty_figure("Run an analysis to see this chart.", 320),
         waterfall_caption="",
@@ -177,7 +177,7 @@ def build_view(
         ),
         reliability_meta=ui.reliability_meta(diag),
         gate_plot=(
-            plots.donut(gate, TOKENS["primary"], f"{gate:.2f}", "semantic reliance")
+            plots.donut(gate, TOKENS["primary"], f"{gate:.2f}", "mean fusion gate")
             if gate is not None
             else plots.donut(
                 0.0, TOKENS["muted_series"], "n/a", "attention fusion only"
@@ -237,13 +237,7 @@ class DashboardController:
 
     # -- analysis ----------------------------------------------------------------------
     @spaces.GPU
-    def analyze(
-        self, text: str, model_label: str, precision: str, progress=None
-    ) -> tuple:
-        def report(fraction: float, message: str) -> None:
-            if progress is not None:
-                progress(fraction, desc=message)
-
+    def analyze(self, text: str, model_label: str, precision: str) -> tuple:
         text = (text or "").strip()
         if not text:
             return empty_view(
@@ -257,7 +251,6 @@ class DashboardController:
             )
         option = self.models.get(model_label) or next(iter(self.models.values()))
         try:
-            report(0.1, "Loading model")
             model, tokenizer = self.registry.get(option.model_id)
             config = ExplainConfig(
                 owen_method="permutation" if precision == PRECISION_FAST else "exact"
@@ -265,9 +258,7 @@ class DashboardController:
             explainer = FlairdExplainer(
                 model, tokenizer, config, model_id=option.model_id
             )
-            report(0.4, "Explaining the decision")
             explanation = explainer.explain(text)
-            report(0.9, "Drawing charts")
             return build_view(explanation, config.top_k_features, note).as_tuple()
         except ValueError as error:
             return empty_view(
